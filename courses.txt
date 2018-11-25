@@ -1,0 +1,10 @@
+cpp dina lev 5 nc 
+cpp libi yosef 5 nc 
+java ben avny 4 nc
+python shalom levi 4 nc
+logic1 or chadad 5 nc
+logic2 shir levi 4 nc
+english eden golan 3 c
+french shira biton 2 c
+tennis yotam nili 2 c
+physics liat dev 3 c
