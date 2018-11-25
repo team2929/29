@@ -1,0 +1,183 @@
+#include <iostream>
+using namespace std;
+#include <fstream>
+#include <string>
+#include <iomanip>
+#include <time.h>
+
+void allUsersReporte(char* filename);
+char *createEmail();
+void login(char* users)
+{
+	///////////students/////////////
+	int numberOfpeople = 0, j = 0, i = 0;
+	char pass[9], password[9], type = NULL;
+	//file >> numberOfpeople; //size of the array
+	//file.close();//close the file
+	//file.open(users);
+	while (j != 1)
+	{
+		ifstream file(users);
+		if (!file)//if file couldnt open, throws an exception
+			throw runtime_error("file is empty");
+		file.close();//close the file
+		file.open(users);
+		char name[30], val[30], *s1 = NULL, *s2 = NULL;
+		cout << "Enter username\n";
+		cin >> name;
+		s1 = new char[strlen(name) + 1];
+		strcpy(s1, name);
+		cout << "Enter password:\n";
+		cin >> password;
+		while (file >> val)
+		{
+
+			s2 = new char[strlen(val) + 1];
+			strcpy(s2, val);
+			if (strcmp(s1, s2) == 0)
+			{
+
+				file >> pass;
+				if (strcmp(pass, password) == 0)
+				{
+					j = 1;
+					file >> pass;
+					if (pass[0] == 'A')
+						type = 'A';
+					else if (pass[0] == 'B')
+						type = 'B';
+					else if (pass[0] == 'C')
+						type = 'C';
+					break;
+				}
+				cout << "incorrect password!" << endl;
+			}
+		}
+		delete s1;
+		delete s2;
+
+		file.close();//close the file
+
+	}
+	int choice;
+	switch (type)
+	{
+		/////////menu+cin choise//////////////
+	case 'A':
+		cout << "-------------Menu--------------------\n1.To print all users\n";
+		cin >> choice;
+		switch (choice)
+		{
+
+		case 1:
+		{
+			cout << "1\n";
+			allUsersReporte("users.txt");//דוח כלל המשתמשים
+		}
+		case 2:
+			createEmail();
+		/*case 3:
+			repot();
+		case 4:
+			restartSystem();
+		case 5:
+			addUser();
+		case 6:
+			bugIinsystem();
+		case 7:
+			securitySystem();
+		case 8:
+			Backup();
+		case 9:
+			exit;
+		}
+	case 'C':
+		switch (choice)
+		{
+		case 1:
+			explanationTostudent("explanation.txt");
+		case 2:
+			showOption();
+		case 3:
+			addChoiceCourse(name);
+		case 4:
+			changeCourse();
+		case 5:
+			shareTimeTable();
+		case 6:
+			gradeReport();
+		case 7:
+			TimeTableReport(name);
+		}
+	case 'B':
+		switch (choice)
+		{
+		case 1:
+			changePlaceNumber();
+		case 2:
+			addStudent();
+		case 3:
+			TimeTableReport2();
+		case 4:
+			StudentsRequest();
+		case 5:
+			MembersInCourse();
+		case 6:
+			MessageChangment();
+		case 7:
+			choiceCourseCancelled();
+		case 8:
+			addChoiceCourse2();
+		case 9:
+			addToExam();
+		}
+	}*/
+		
+	
+
+		}
+
+	}
+
+}
+
+char* createEmail(char* first,char*last)
+{
+	
+
+	int sizeF = strlen(first),i=0;
+	char* arry = new char[sizeF + 5];
+	for ( i = 0; i < sizeF; i++)
+		arry[i] = first[i];
+	for (int j = 0; j < 2; j++)
+		arry[i++] = last[j];
+	for (int j = 0; j < 2; j++)
+		arry[i++] = rand() % 9 + 1;
+	cout << arry;
+}
+void allUsersReporte(char* filename)
+{
+	char val;
+	ifstream file(filename);
+	if (!file)//if file couldnt open, throws an exception
+		throw runtime_error("file is empty");
+	file.close();//close the file
+	file.open(filename);
+
+	while (!file.eof()) {
+		if (filename) {
+
+			string val;
+			getline(file, val);
+			cout << val;
+		}
+		cout << endl;
+	}
+}
+
+int main()
+{
+	char* fileName = NULL;
+
+	login("users.txt");
+}
