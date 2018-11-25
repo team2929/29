@@ -23,7 +23,8 @@ char* createEmail(char* first, char*last)
 	arry[i] = '\0';
 	return arry;
 }
-void Add_Users(char harshaa) {
+/*This function add users and write them in the data-bases(files) */
+void Add_Users(char authorization) {
 	int  size, id;
 	char temp1[100], temp2[100], *name, *last, password[9] = { "Ee123456" }, *mail;
 	cout << "enter first name:" << endl;
@@ -45,26 +46,28 @@ void Add_Users(char harshaa) {
 	cout << "enter id:" << endl;
 	cin >> id;
 	mail = createEmail(name, last);
+	//write in user's data-base.
 	ofstream file1;
 	file1.open("users.txt", ios::app);
-	file1 << endl << name << " " << last << " " << id << " " << mail << " " << password << " " << harshaa;
+	file1 << endl << name << " " << last << " " << id << " " << mail << " " << password << " " << authorization;
 	file1.close();
-	if (harshaa=='A')
+	//write in the data-base matches him.
+	if (authorization=='A')
 	{
 		file1.open("info.txt", ios::app);
-		file1 << endl << name << " " << last << " " << id << " " << mail << " " << password << " " << harshaa;
+		file1 << endl << name << " " << last << " " << id << " " << mail << " " << password << " " << authorization;
 		file1.close();
 	}
-	else if (harshaa == 'B')
+	else if (authorization == 'B')
 	{
 		file1.open("secretary.txt", ios::app);
-		file1 << endl << name << " " << last << " " << id << " " << mail << " " << password << " " << harshaa;
+		file1 << endl << name << " " << last << " " << id << " " << mail << " " << password << " " << authorization;
 		file1.close();
 	}
 	else
 	{
 		file1.open("students.txt", ios::app);
-		file1 << endl << name << " " << last << " " << id << " " << mail << " " << password << " " << harshaa;
+		file1 << endl << name << " " << last << " " << id << " " << mail << " " << password << " " << authorization;
 		file1.close();
 	}
 }
@@ -72,11 +75,11 @@ void Add_Users(char harshaa) {
 
 void main() {
 
-	char harshaa;
-	cout << "enter  harshaa:\n A\n B\n C\n";
-	cin >> harshaa;
+	char authorization;
+	cout << "enter  authorization:\n A\n B\n C\n";
+	cin >> authorization;
 
-	switch (harshaa)
+	switch (authorization)
 	{
 	case 'A':
 	{
