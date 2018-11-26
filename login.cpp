@@ -4,17 +4,17 @@ using namespace std;
 #include <string>
 #include <iomanip>
 #include <time.h>
+#include <cstdio>
 
+void changePosition(char*,char*);
+void Backup(char*);
 void allUsersReporte(char* filename);
-char *createEmail();
+char *createEmail(char* first, char*last);
 void login(char* users)
 {
 	///////////students/////////////
 	int numberOfpeople = 0, j = 0, i = 0;
 	char pass[9], password[9], type = NULL;
-	//file >> numberOfpeople; //size of the array
-	//file.close();//close the file
-	//file.open(users);
 	while (j != 1)
 	{
 		ifstream file(users);
@@ -65,20 +65,19 @@ void login(char* users)
 		/////////menu+cin choise//////////////
 	case 'A':
 		cout << "-------------Menu--------------------\n1.To print all users\n";
+		cout << "2.To change user classification\n";
 		cin >> choice;
 		switch (choice)
 		{
-
 		case 1:
-		{
-			cout << "1\n";
 			allUsersReporte("users.txt");//דוח כלל המשתמשים
-		}
 		case 2:
-			createEmail();
-		/*case 3:
-			repot();
-		case 4:
+			changePosition("yaelbu11@ac.sce.ac.il", "users.txt");
+		case 3:
+			createEmail("sapir", "sabahat");
+		/*case 4:
+			Backup();
+		/*case 4:
 			restartSystem();
 		case 5:
 			addUser();
@@ -87,7 +86,7 @@ void login(char* users)
 		case 7:
 			securitySystem();
 		case 8:
-			Backup();
+			repot();
 		case 9:
 			exit;
 		}
@@ -144,16 +143,21 @@ void login(char* users)
 char* createEmail(char* first,char*last)
 {
 	
-
+	char temp[14] =  "@ac.sce.ac.il";
 	int sizeF = strlen(first),i=0;
-	char* arry = new char[sizeF + 5];
+	char* arry = new char[sizeF + 19];
 	for ( i = 0; i < sizeF; i++)
 		arry[i] = first[i];
 	for (int j = 0; j < 2; j++)
 		arry[i++] = last[j];
 	for (int j = 0; j < 2; j++)
-		arry[i++] = rand() % 9 + 1;
-	cout << arry;
+	{
+		arry[i++] = (rand() % 9)+'0';
+	}
+	for (int j = 0; j < strlen(temp); j++)
+		arry[i++] = temp[j];
+	arry[i] = '\0';
+	return arry;
 }
 void allUsersReporte(char* filename)
 {
@@ -174,6 +178,72 @@ void allUsersReporte(char* filename)
 		cout << endl;
 	}
 }
+
+void changePosition(char * email,char* filename)
+{
+	cout << "Enter the new position to user:\n";
+	char n,val[30],*s2=NULL,type,a[2]="A",b[2]="B",c[2]="C";
+	cin >> n;
+	ofstream newFile;
+	newFile.open("new.txt");
+	fstream ofs(filename,ios::in|ios::out);
+
+
+	while (ofs >> val)
+	{		
+		newFile << val<<' ';
+		if (strcmp(val, email) == 0)
+		{
+			ofs >> val;
+			newFile << val<<' ';
+			ofs >> val;
+			newFile << n << ' ' << endl;
+
+		}
+		else if (strcmp(val, a)==0 || strcmp(val, b)==0 || strcmp(val, c)==0)
+		{
+			ofs >> val;
+			newFile << endl << val<< ' ' ;
+			
+		}
+	}
+	newFile.close();
+	ofs.close();
+	//newFile.open("new.txt");
+	
+	//fstream users("users.txt", ios::out | ios::trunc);
+
+
+	remove("users.txt");
+	rename("new.txt", "users.txt");
+	
+
+
+		/*
+		ifstream file(filename);
+		if (!file)//if file couldnt open, throws an exception
+			throw runtime_error("file is empty");
+		file.close();//close the file
+		file.open(filename);
+		while (file >> val)
+		{
+			s2 = new char[strlen(val) + 1];
+			strcpy(s2 ,val);
+			if (strcmp(email, s2) == 0)
+			{
+				file >> val;
+				file >> val;
+				strcpy(val, n);
+
+
+			}
+
+
+		}*/
+	
+}
+
+
 
 int main()
 {
