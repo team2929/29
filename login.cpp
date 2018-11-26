@@ -10,6 +10,13 @@ void changePosition(char*,char*);
 void Backup(char*);
 void allUsersReporte(char* filename);
 char *createEmail(char* first, char*last);
+void restartSystem();
+void bugIinsystem();
+void resetPassword(char*);
+
+
+
+
 void login(char* users)
 {
 	///////////students/////////////
@@ -65,7 +72,8 @@ void login(char* users)
 		/////////menu+cin choise//////////////
 	case 'A':
 		cout << "-------------Menu--------------------\n1.To print all users\n";
-		cout << "2.To change user classification\n";
+		cout << "2.To change user classification\n3.To backup the system\n4.To restart the system\n";
+		cout << "6.To producing a computer BUGS report\n7.To reset password\n";
 		cin >> choice;
 		switch (choice)
 		{
@@ -74,17 +82,17 @@ void login(char* users)
 		case 2:
 			changePosition("yaelbu11@ac.sce.ac.il", "users.txt");
 		case 3:
-			createEmail("sapir", "sabahat");
-		/*case 4:
-			Backup();
-		/*case 4:
+			Backup("users.txt");
+		case 4:
 			restartSystem();
 		case 5:
-			addUser();
+			createEmail("sapir", "sabahat");
 		case 6:
 			bugIinsystem();
 		case 7:
-			securitySystem();
+			resetPassword("users.txt");
+		/*case 7:
+		addUser();	
 		case 8:
 			repot();
 		case 9:
@@ -178,7 +186,6 @@ void allUsersReporte(char* filename)
 		cout << endl;
 	}
 }
-
 void changePosition(char * email,char* filename)
 {
 	cout << "Enter the new position to user:\n";
@@ -187,6 +194,8 @@ void changePosition(char * email,char* filename)
 	ofstream newFile;
 	newFile.open("new.txt");
 	fstream ofs(filename,ios::in|ios::out);
+	if (!filename)//if file couldnt open, throws an exception
+		throw runtime_error("file is empty");
 
 
 	while (ofs >> val)
@@ -208,42 +217,150 @@ void changePosition(char * email,char* filename)
 		}
 	}
 	newFile.close();
-	ofs.close();
-	//newFile.open("new.txt");
-	
-	//fstream users("users.txt", ios::out | ios::trunc);
-
-
+	ofs.close();	
 	remove("users.txt");
 	rename("new.txt", "users.txt");
 	
-
-
-		/*
-		ifstream file(filename);
-		if (!file)//if file couldnt open, throws an exception
-			throw runtime_error("file is empty");
-		file.close();//close the file
-		file.open(filename);
-		while (file >> val)
+}
+void Backup(char* filename)
+{
+	ofstream backup;
+	backup.open("BackUpUsers.txt");
+	fstream usresOriginal(filename);
+	char val[30], a[2] = "A", b[2] = "B", c[2] = "C";
+	if (backup)
+	{
+		fstream backup("BackUpUsers.txt", ios::out | ios::trunc);
+		while (usresOriginal >> val)
 		{
-			s2 = new char[strlen(val) + 1];
-			strcpy(s2 ,val);
-			if (strcmp(email, s2) == 0)
+			backup << val << ' ';
+			if (strcmp(val, a) == 0 || strcmp(val, b) == 0 || strcmp(val, c) == 0)
 			{
-				file >> val;
-				file >> val;
-				strcpy(val, n);
-
+				usresOriginal >> val;
+				backup << endl << val << ' ';
 
 			}
+		}
+
+		backup.close();
+		usresOriginal.close();
+	}
+	else
+	{
+		while (usresOriginal >> val)
+		{
+			backup << val << ' ';
+			if (strcmp(val, a) == 0 || strcmp(val, b) == 0 || strcmp(val, c) == 0)
+			{
+				usresOriginal >> val;
+				backup << endl << val << ' ';
+
+			}
+		}
+
+		backup.close();
+		usresOriginal.close();
 
 
-		}*/
-	
+	}
 }
+void restartSystem()
+{
 
 
+	Backup("users.txt");
+	fstream restart("users.txt", ios::out | ios::trunc);
+	restart.close();
+
+
+
+}
+void bugIinsystem()
+{
+	int month = 0;
+	char numberRepot[6];
+	cout << "Enter the month in which you want to see the bug report\n";
+	cin >> month;
+	while (month <= 0 || month > 12)
+	{
+		cout << "Incorrect input. enter again: ";
+		cin >> month;
+	}
+	cout << "Select the report number\n";
+	cout << "1001A- Processes data\n1003A- Produces output\n9991B- System virus\n9992B- Security breaches\n-->";
+	cin >> numberRepot;
+
+	while (strcmp(numberRepot,"1001A")==1&& (strcmp(numberRepot, "1003A"))==1 && (strcmp(numberRepot, "9991B"))==1 && (strcmp(numberRepot, "9992B"))==1)
+	{
+		cout << "This report does not exist Please enter an existing report from the list\n";
+		cin >> numberRepot;
+	}
+	
+	
+	cout << "\nIn month["<<month<<"], "<<"4 bugs were detected.\na detailed report was sent for printing.\n";
+
+}
+void resetPassword(char* filename)
+{
+	char user[30], val[30], *s2 = NULL, NewPass[9], a[2] = "A", b[2] = "B", c[2] = "C";
+	int check = 0,j=0;
+	cout << "Enter the user name to reset the password:\n";
+	cin >> user;
+	cout << "Enter the new password:\n(start with capital letter,contain at least 1 digit and 1 small letter)";
+	cin >> NewPass;
+	ofstream newFile;
+	newFile.open("new.txt");
+	fstream ofs(filename, ios::in | ios::out);
+	if (!filename)//if file couldnt open, throws an exception
+		throw runtime_error("file is empty");
+	do {
+		j = 1;
+		while (strlen(NewPass) < 8)
+		{
+			cout << "A password must have 8 characters\nEnter again: ";
+			cin >> NewPass;
+			j = 0;
+		}
+		while (NewPass[0]<'A' || NewPass[0]>'Z')
+		{
+			cout << "Password must begin with a capital letter\nEnter again: ";
+			cin >> NewPass;
+			j = 0;
+		}
+
+		while ((NewPass[0]<'A' || NewPass[0]>'Z') && (NewPass[1]<'A' || NewPass[1]>'Z') &&(NewPass[2]<'A' || NewPass[2]>'Z') && (NewPass[3]<'A' || NewPass[3]>'Z') && (NewPass[4]<'A' || NewPass[4]>'Z') && (NewPass[5]<'A' || NewPass[5]>'Z') && (NewPass[6]<'A' || NewPass[6]>'Z') && (NewPass[7]<'A' || NewPass[7]>'Z'))
+		{
+			cout << "A password must contain a small letter\nEnter again: ";
+			cin >> NewPass;
+			j = 0;
+		}
+		
+	} while (j == 0);
+	while (ofs >> val)
+	{
+		newFile << val << ' ';
+		if (strcmp(val, user) == 0)
+		{
+			ofs >> val;
+			newFile << NewPass<<' ';
+
+		}
+		else if (strcmp(val, a) == 0 || strcmp(val, b) == 0 || strcmp(val, c) == 0)
+		{
+			newFile << endl;
+			
+			
+
+		}
+	}
+	newFile.close();
+	ofs.close();
+	remove("users.txt");
+	rename("new.txt", "users.txt");
+
+
+
+}
 
 int main()
 {
