@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 using namespace std;
 #include <fstream>
@@ -6,7 +7,9 @@ using namespace std;
 #include <time.h>
 #include <cstdio>
 
-void changePosition(char*,char*);
+void addUser();
+void changePosition(char*, char*);
+char login_user(char*);
 void Backup(char*);
 void allUsersReporte(char* filename);
 char *createEmail(char* first, char*last);
@@ -14,11 +17,7 @@ void restartSystem();
 void bugIinsystem();
 void resetPassword(char*);
 
-
-
-
-void login(char* users)
-{
+char login_user(char* users) {
 	///////////students/////////////
 	int numberOfpeople = 0, j = 0, i = 0;
 	char pass[9], password[9], type = NULL;
@@ -64,103 +63,186 @@ void login(char* users)
 		delete s2;
 
 		file.close();//close the file
-
-	}
-	int choice;
-	switch (type)
-	{
-		/////////menu+cin choise//////////////
-	case 'A':
-		cout << "-------------Menu--------------------\n1.To print all users\n";
-		cout << "2.To change user classification\n3.To backup the system\n4.To restart the system\n";
-		cout << "6.To producing a computer BUGS report\n7.To reset password\n";
-		cin >> choice;
-		switch (choice)
-		{
-		case 1:
-			allUsersReporte("users.txt");//דוח כלל המשתמשים
-		case 2:
-			changePosition("yaelbu11@ac.sce.ac.il", "users.txt");
-		case 3:
-			Backup("users.txt");
-		case 4:
-			restartSystem();
-		case 5:
-			createEmail("sapir", "sabahat");
-		case 6:
-			bugIinsystem();
-		case 7:
-			resetPassword("users.txt");
-		/*case 7:
-		addUser();	
-		case 8:
-			repot();
-		case 9:
-			exit;
-		}
-	case 'C':
-		switch (choice)
-		{
-		case 1:
-			explanationTostudent("explanation.txt");
-		case 2:
-			showOption();
-		case 3:
-			addChoiceCourse(name);
-		case 4:
-			changeCourse();
-		case 5:
-			shareTimeTable();
-		case 6:
-			gradeReport();
-		case 7:
-			TimeTableReport(name);
-		}
-	case 'B':
-		switch (choice)
-		{
-		case 1:
-			changePlaceNumber();
-		case 2:
-			addStudent();
-		case 3:
-			TimeTableReport2();
-		case 4:
-			StudentsRequest();
-		case 5:
-			MembersInCourse();
-		case 6:
-			MessageChangment();
-		case 7:
-			choiceCourseCancelled();
-		case 8:
-			addChoiceCourse2();
-		case 9:
-			addToExam();
-		}
-	}*/
-		
-	
-
-		}
+		return type;
 
 	}
 
 }
-
-char* createEmail(char* first,char*last)
+void login(char* users)
 {
-	
-	char temp[14] =  "@ac.sce.ac.il";
-	int sizeF = strlen(first),i=0;
+	char user[30];
+	char type;
+	bool checking = true;
+	while (checking)
+	{
+
+		type = login_user(users);
+		int choice;
+
+
+		switch (type)
+		{
+			/////////menu+cin choise//////////////
+		case 'A':
+		{
+			do
+			{
+				cout << "-------------Menu--------------------\n1.To print all users\n";
+				cout << "2.To change user classification\n3.To backup the system\n4.To restart the system\n";
+				cout << "5.To add user\n6.To producing a computer BUGS report\n7.To reset password\n";
+				cout << "8. exit from the system" << endl;
+				cin >> choice;
+				switch (choice)
+				{
+				case 1:
+				{
+					allUsersReporte("users.txt");//דוח כלל המשתמשים
+
+					break;
+				}
+				case 2:
+				{
+					cout << "Enter username:" << endl;
+					cin >> user;
+					changePosition(user, "users.txt");
+					break;
+				}
+				case 3:
+				{
+					Backup("users.txt");
+					break;
+				}
+				case 4:
+				{
+					restartSystem();
+					break;
+				}
+				case 5:
+				{
+					addUser();
+					break;
+				}
+				case 6:
+				{
+					bugIinsystem();
+					break;
+				}
+				case 7:
+				{
+					resetPassword(users);
+					break;
+				}
+				case 8:
+				{
+					cout << "goodbye user!" << endl;
+					break;
+				}
+				case 9:
+				{
+					cout << "goodbye!" << endl;
+					exit(1);
+				}
+				}//end {} of switch.
+			} while (choice != 8);
+			break;//to end switch case
+		}
+		case 'B':
+		{
+			cout << "-----------------------Secratery Menu--------------------\n1.To change number of people in course\n";
+			cout << "2.To add student to course\n3.To print time table\n4.To print Students Request report\n";
+			cout << "5.To see number of people in course\n6.To send message about course changes\n";
+			cout << "7.To cancel elective course\n8.To ading an elective course\n";
+			cout << "9.To add student to exam list\n10.Exit\n";
+			break;//to end switch case
+		}
+		case 'C':
+		{
+			cout << "-------------------------Student Menu----------------------------\n1.for a user guide\n";
+			cout << "2.To see option for timetable\n3.To ading an elective course\n4.To change course in the timetable\n";
+			cout << "5.To share your timetable\n6.To print grade report\n7.To print your timetable\n";
+			cout << "8.To print test board\n9.To login with anothe user\n";
+			cin >> choice;
+			switch (choice)
+			{
+			case 1:
+			{
+				cout << "User guide :\n\noption 1: the system will give you an option\n to random timetable for your choice ', and the given\n timetable will show on the screen.\nyou can approve the given timetable by saving\n data or choose to show you another random tinmeable.\nfor every Option of the system you can go back to main menu." << endl << endl;
+				cout << "option 2 :the system will give you an option for Manual registration / change course as you want.\nan option will give you to add\n regular courses / add choice courses - every option will appear on the screen.\nAfter selecting the option you want - a list of courses will appear for adding or removing .\n**each step will be given an option to go back to the main menu.\nFor Additional inquiries or more information, please contact the Registrar" << endl;
+				cout << "phone:08-7435612, E-mail: einavmal11@ac.sce.ac.il\ngood luck!" << endl;
+			}
+			default:
+				break;
+			}
+			break;//to end switch case
+		}
+		}
+	}
+}
+
+
+void addUser() {
+	int  size, id;
+	char temp1[100], temp2[100], *name, *last, password[9] = { "Ee123456" }, *mail, position;
+	cout << "enter first name:" << endl;
+	cin >> temp1;
+	size = strlen(temp1);
+	name = new char[size + 1];
+	for (int i = 0; i < size + 1; i++)
+	{
+		name[i] = temp1[i];
+	}
+	cout << "enter last name:" << endl;
+	cin >> temp2;
+	size = strlen(temp2);
+	last = new char[size + 1];
+	for (int i = 0; i < size + 1; i++)
+	{
+		last[i] = temp2[i];
+	}
+	cout << "enter id:" << endl;
+	cin >> id;
+	mail = createEmail(name, last);
+	cout << "enter position\n";
+	cin >> position;
+	//write in user's data-base.
+	ofstream file1;
+	file1.open("users.txt", ios::app);
+	file1 << endl << name << " " << last << " " << id << " " << mail << " " << password << " " << position;
+	file1.close();
+	//write in the data-base matches him.
+	if (position == 'A')
+	{
+		file1.open("info.txt", ios::app);
+		file1 << endl << name << " " << last << " " << id << " " << mail << " " << password << " " << position;
+		file1.close();
+	}
+	else if (position == 'B')
+	{
+		file1.open("secretary.txt", ios::app);
+		file1 << endl << name << " " << last << " " << id << " " << mail << " " << password << " " << position;
+		file1.close();
+	}
+	else
+	{
+		file1.open("students.txt", ios::app);
+		file1 << endl << name << " " << last << " " << id << " " << mail << " " << password << " " << position;
+		file1.close();
+	}
+
+}
+char* createEmail(char* first, char*last)
+{
+
+	char temp[14] = "@ac.sce.ac.il";
+	int sizeF = strlen(first), i = 0;
 	char* arry = new char[sizeF + 19];
-	for ( i = 0; i < sizeF; i++)
+	for (i = 0; i < sizeF; i++)
 		arry[i] = first[i];
 	for (int j = 0; j < 2; j++)
 		arry[i++] = last[j];
 	for (int j = 0; j < 2; j++)
 	{
-		arry[i++] = (rand() % 9)+'0';
+		arry[i++] = (rand() % 9) + '0';
 	}
 	for (int j = 0; j < strlen(temp); j++)
 		arry[i++] = temp[j];
@@ -186,41 +268,41 @@ void allUsersReporte(char* filename)
 		cout << endl;
 	}
 }
-void changePosition(char * email,char* filename)
+void changePosition(char * email, char* filename)
 {
 	cout << "Enter the new position to user:\n";
-	char n,val[30],*s2=NULL,type,a[2]="A",b[2]="B",c[2]="C";
+	char n, val[30], *s2 = NULL, type, a[2] = "A", b[2] = "B", c[2] = "C";
 	cin >> n;
 	ofstream newFile;
 	newFile.open("new.txt");
-	fstream ofs(filename,ios::in|ios::out);
+	fstream ofs(filename, ios::in | ios::out);
 	if (!filename)//if file couldnt open, throws an exception
 		throw runtime_error("file is empty");
 
 
 	while (ofs >> val)
-	{		
-		newFile << val<<' ';
+	{
+		newFile << val << ' ';
 		if (strcmp(val, email) == 0)
 		{
 			ofs >> val;
-			newFile << val<<' ';
+			newFile << val << ' ';
 			ofs >> val;
 			newFile << n << ' ' << endl;
 
 		}
-		else if (strcmp(val, a)==0 || strcmp(val, b)==0 || strcmp(val, c)==0)
+		else if (strcmp(val, a) == 0 || strcmp(val, b) == 0 || strcmp(val, c) == 0)
 		{
 			ofs >> val;
-			newFile << endl << val<< ' ' ;
-			
+			newFile << endl << val << ' ';
+
 		}
 	}
 	newFile.close();
-	ofs.close();	
+	ofs.close();
 	remove("users.txt");
 	rename("new.txt", "users.txt");
-	
+
 }
 void Backup(char* filename)
 {
@@ -290,20 +372,20 @@ void bugIinsystem()
 	cout << "1001A- Processes data\n1003A- Produces output\n9991B- System virus\n9992B- Security breaches\n-->";
 	cin >> numberRepot;
 
-	while (strcmp(numberRepot,"1001A")==1&& (strcmp(numberRepot, "1003A"))==1 && (strcmp(numberRepot, "9991B"))==1 && (strcmp(numberRepot, "9992B"))==1)
+	while (strcmp(numberRepot, "1001A") == 1 && (strcmp(numberRepot, "1003A")) == 1 && (strcmp(numberRepot, "9991B")) == 1 && (strcmp(numberRepot, "9992B")) == 1)
 	{
 		cout << "This report does not exist Please enter an existing report from the list\n";
 		cin >> numberRepot;
 	}
-	
-	
-	cout << "\nIn month["<<month<<"], "<<"4 bugs were detected.\na detailed report was sent for printing.\n";
+
+
+	cout << "\nIn month[" << month << "], " << "4 bugs were detected.\na detailed report was sent for printing.\n";
 
 }
 void resetPassword(char* filename)
 {
 	char user[30], val[30], *s2 = NULL, NewPass[9], a[2] = "A", b[2] = "B", c[2] = "C";
-	int check = 0,j=0;
+	int check = 0, j = 0;
 	cout << "Enter the user name to reset the password:\n";
 	cin >> user;
 	cout << "Enter the new password:\n(start with capital letter,contain at least 1 digit and 1 small letter)";
@@ -328,13 +410,13 @@ void resetPassword(char* filename)
 			j = 0;
 		}
 
-		while ((NewPass[0]<'A' || NewPass[0]>'Z') && (NewPass[1]<'A' || NewPass[1]>'Z') &&(NewPass[2]<'A' || NewPass[2]>'Z') && (NewPass[3]<'A' || NewPass[3]>'Z') && (NewPass[4]<'A' || NewPass[4]>'Z') && (NewPass[5]<'A' || NewPass[5]>'Z') && (NewPass[6]<'A' || NewPass[6]>'Z') && (NewPass[7]<'A' || NewPass[7]>'Z'))
+		while ((NewPass[0]<'A' || NewPass[0]>'Z') && (NewPass[1]<'A' || NewPass[1]>'Z') && (NewPass[2]<'A' || NewPass[2]>'Z') && (NewPass[3]<'A' || NewPass[3]>'Z') && (NewPass[4]<'A' || NewPass[4]>'Z') && (NewPass[5]<'A' || NewPass[5]>'Z') && (NewPass[6]<'A' || NewPass[6]>'Z') && (NewPass[7]<'A' || NewPass[7]>'Z'))
 		{
 			cout << "A password must contain a small letter\nEnter again: ";
 			cin >> NewPass;
 			j = 0;
 		}
-		
+
 	} while (j == 0);
 	while (ofs >> val)
 	{
@@ -342,14 +424,14 @@ void resetPassword(char* filename)
 		if (strcmp(val, user) == 0)
 		{
 			ofs >> val;
-			newFile << NewPass<<' ';
+			newFile << NewPass << ' ';
 
 		}
 		else if (strcmp(val, a) == 0 || strcmp(val, b) == 0 || strcmp(val, c) == 0)
 		{
 			newFile << endl;
-			
-			
+
+
 
 		}
 	}
@@ -361,7 +443,6 @@ void resetPassword(char* filename)
 
 
 }
-
 int main()
 {
 	char* fileName = NULL;
