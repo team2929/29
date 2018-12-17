@@ -6,7 +6,22 @@ using namespace std;
 #include <iomanip>
 #include <time.h>
 #include <cstdio>
+typedef struct detail_course {
+	char* lecture;
+	char* name_course;
+};
+typedef struct student {
+	char* first_name;
+	char* last_name;
+	detail_course* detail;
 
+};
+typedef struct list
+{
+	student* data;
+	list* next;
+};
+list *head = NULL;
 void addUser();
 void changePosition(char*, char*);
 char login_user(char*);
@@ -16,6 +31,7 @@ char *createEmail(char* first, char*last);
 void restartSystem();
 void bugIinsystem();
 void resetPassword(char*);
+void createlist(student*);
 
 char login_user(char* users) {
 	///////////students/////////////
@@ -178,7 +194,28 @@ void login(char* users)
 		}
 	}
 }
+void createlist(student* a) {
+	list *temp = NULL;
+	list* p;
+	temp = new list;
+	temp->data = a;
+	temp->next = NULL;
+	if (head == NULL) {
 
+		head = temp;
+	}
+	else
+	{
+		p = head;
+		while (p->next != NULL)
+		{
+			p = p->next;
+		}
+		p->next = temp;
+	}
+
+
+}
 
 void addUser() {
 	int  size, id;
@@ -228,7 +265,14 @@ void addUser() {
 		file1 << endl << name << " " << last << " " << id << " " << mail << " " << password << " " << position;
 		file1.close();
 	}
+	student *temp = new student;
+	temp->first_name = new char[strlen(name)];
+	strcpy(temp->first_name, name);
 
+	temp->last_name = new char[strlen(last)];
+	strcpy(temp->last_name, last);
+
+	createlist(temp);
 }
 char* createEmail(char* first, char*last)
 {
