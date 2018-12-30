@@ -6,6 +6,8 @@ using namespace std;
 #include <iomanip>
 #include <time.h>
 #include <cstdio>
+#include <cmath>
+
 
 typedef struct details_courses {
 	char* lecture;
@@ -33,6 +35,20 @@ typedef struct list
 };
 
 list *head = NULL;
+int CountFSE = 10;
+int CountFSEP = 10;
+int CountPSE = 10;
+int CountPSEL = 10;
+int CountAFL = 10;
+int CountAFLL = 10;
+int CountDatastruc = 10;
+int CountDatastrucL = 10;
+int CountEnglishR = 5;
+int CountEnglishG = 5;
+int CountTenis = 5;
+int CountFrench = 5;
+int CountWine = 5;
+
 void addUser();
 void changePosition(char*, char*);
 char login_user(char*);
@@ -53,37 +69,178 @@ void add_courses();
 void security();
 void shareTimeTable();
 void printExamTable();
-
-void create_list_course(int id,char* day,char* nlecture, char* ncourse) {
-	list* s = head;
-	details_courses *temp = NULL;
-	details_courses* p;
-	temp = new details_courses;
-	temp->lecture = new char[strlen(nlecture) + 1];
-	strcpy(temp->lecture, nlecture);
-	temp->name_course = new char[strlen(ncourse) + 1];
-	strcpy(temp->name_course,ncourse);
-	temp->next = NULL;
-	while (s->data->ID != id)
+int DeleteChoiseCourse(int,char*);
+void numStudentIncourse();
+void ReportusersLogin(char*);
+void printReportUS(char *);
+void Changecountplaces(int, int, int&);
+void Change_num_place();
+bool check_place(int);
+void create_list_course(int, char*, char* , char* , int&);
+void Change_num_place() {
+	int choice, num, dori;
+	cout << "please enter number to Increase or decrease the number of students in the course" << endl;
+	cin >> num;
+	cout << "enter 1-to Increase \n 2-to decrease" << endl;
+	cin >> dori;
+	cout << "please enter your menu choise(1-9)" << endl;
+	do
 	{
+		cout << "-------------course Menu-----------------\n1.FSE\n";
+		cout << "2.FSE-practice\n3.PSE\n4.PSE-lab\n";
+		cout << "5.AFL\n6.AFL-lab\n7.Data struction\n";
+		cout << "8.Data struction-lab\n" << endl;
+
+		cin >> choice;
+		switch (choice)
+		{
+		case 1:
+		{
+			system("cls");
+			Changecountplaces(num, dori, CountFSE);
+			cout << CountFSE << endl;
+			exit(1);
+			break;
+		}
+		case 2:
+		{
+			system("cls");
+			Changecountplaces(num, dori, CountFSEP);
+			exit(1);
+			break;
+		}
+		case 3:
+		{
+			system("cls");
+			Changecountplaces(num, dori, CountPSE);
+			exit(1);
+			break;
+		}
+		case 4:
+		{
+			system("cls");
+			Changecountplaces(num, dori, CountPSEL);
+			exit(1);
+			break;
+		}
+		case 5:
+		{
+			system("cls");
+			Changecountplaces(num, dori, CountAFL);
+			exit(1);
+			break;
+		}
+		case 6:
+		{
+			system("cls");
+			Changecountplaces(num, dori, CountAFLL);
+			exit(1);
+			break;
+		}
+		case 7:
+		{
+			system("cls");
+			Changecountplaces(num, dori, CountDatastruc);
+			exit(1);
+			break;
+		}
+		case 8:
+		{
+			system("cls");
+			Changecountplaces(num, dori, CountDatastrucL);
+			exit(1);
+			break;
+		}
+
+		default:
+			cout << "Wrong choice!" << endl;
+		}
+		system("cls");
+	} while (choice != 8);
+}
+void Changecountplaces(int num, int dori, int& count) {
+	if (dori == 2)
+		count = abs(num - count);
+	else
+		count = num + count;
+}
+void numStudentIncourse() {
+	char*subj,str[100],*days,day[10];
+	int k = 0;
+	cout << "Enter a course name to view participants:" << endl;
+	cin >> str;
+	subj = new char[strlen(str)+1];
+	strcpy(subj,str);
+	cout << "enter day" << endl;
+	cin >> day;
+	days = new char[strlen(day) + 1];
+	strcpy(days, day);
+	list* s = head;	
+
+	while (s != NULL) {
+		daysinweek* t = s->data->head;
+		while (t != NULL) {
+			if (strcmp(t->name_day, days) == 0)
+			{
+				details_courses* f = t->courses;
+				while (f != NULL) {
+					if (strcmp(f->name_course, subj) == 0)
+					{
+						cout << s->data->first_name << "  " << s->data->last_name << endl;
+						k++;
+					}
+					f = f->next;
+				}
+			}
+			t = t->next;
+		}
 		s = s->next;
 	}
-	daysinweek* t = s->data->head;
-	while (strcmp(t->name_day, day)!=0)
+	if (k == 0)
 	{
-		t = t->next;
+		cout << "You entered a wrong course !" << endl;
 	}
-	if (t->courses == NULL) {
-		t->courses = temp;
+
+			
+	}
+
+void create_list_course(int id,char* day,char* nlecture, char* ncourse, int& num) {
+	if (check_place(num) == true) {
+		list* s = head;
+		details_courses *temp = NULL;
+		details_courses* p;
+		temp = new details_courses;
+		temp->lecture = new char[strlen(nlecture) + 1];
+		strcpy(temp->lecture, nlecture);
+		temp->name_course = new char[strlen(ncourse) + 1];
+		strcpy(temp->name_course, ncourse);
+		temp->next = NULL;
+		while (s->data->ID != id)
+		{
+			s = s->next;
+		}
+		daysinweek* t = s->data->head;
+		while (strcmp(t->name_day, day) != 0)
+		{
+			t = t->next;
+		}
+		if (t->courses == NULL) {
+			t->courses = temp;
+		}
+		else
+		{
+			p = t->courses;
+			while (p->next != NULL)
+			{
+				p = p->next;
+			}
+			p->next = temp;
+		}
+		num--;
 	}
 	else
 	{
-		p = t->courses;
-		while (p->next != NULL)
-		{
-			p = p->next;
-		}
-		p->next = temp;
+		cout << "There is no places in this course" << endl;
 	}
 }
 void timeTableOption()
@@ -109,31 +266,27 @@ void timeTableOption()
 		}
 		if (choise == 0)
 		{
-			cout << "0" << endl;
 			create(id, "sunday");
-			cout << "1" << endl;
-			create_list_course(id, "sunday", "Isabel Meif", "FSE-practice");
-			cout << "2" << endl;
+			create_list_course(id, "sunday", "Isabel Meif", "FSE-practice", CountFSEP);
+			
 			create(id, "monday");
-			cout << "3" << endl;
-			create_list_course(id, "monday", "Hadas Hasidim", "FSE");
-			cout << "4" << endl;
-			create_list_course(id, "monday", "Svetlana Rusin", "PSE-lab");
-			cout << "5" << endl;
-			create_list_course(id, "monday", "Avishai Kraif", "Data struction-lab");
-			cout << "6" << endl;
+			create_list_course(id, "monday", "Hadas Hasidim", "FSE", CountFSE);
+			
+			create_list_course(id, "monday", "Svetlana Rusin", "PSE-lab", CountPSEL);
+			
+			create_list_course(id, "monday", "Avishai Kraif", "Data struction-lab", CountDatastrucL);
 			create(id, "tuesday");
-			cout << "7" << endl;
-			create_list_course(id, "tuesday", "Irena revayev", "Data struction");
-			cout << "8" << endl;
-			create_list_course(id, "tuesday", "Marina Litbak", "PSE");
-			cout << "9" << endl;
+
+			create_list_course(id, "tuesday", "Irena revayev", "Data struction", CountDatastruc);
+			
+			create_list_course(id, "tuesday", "Marina Litbak", "PSE", CountPSE);
+			
 			create(id, "wednesday");
-			create_list_course(id, "wednesday", "Alexander Chorkin", "AFL");
-			create_list_course(id, "wednesday", "Alexander Shkolnik", "AFL-lab");
+			create_list_course(id, "wednesday", "Alexander Chorkin", "AFL", CountAFL);
+			
+			create_list_course(id, "wednesday", "Alexander Shkolnik", "AFL-lab", CountAFLL);
 			create(id, "thursday");
 			create(id, "friday");
-			cout << "done!" << endl;
 
 
 			break;
@@ -149,16 +302,26 @@ void timeTableOption()
 		if (choise == 0)
 		{
 			create(id, "sunday");
-			create_list_course(id, "sunday", "Isabel Meif", "FSE-practice");
-			create_list_course(id, "sunday", "Hadas Hasidim", "FSE");
-			create_list_course(id, "sunday", "Avishai Kraif", "Data struction-lab");
+			create_list_course(id, "sunday", "Isabel Meif", "FSE-practice", CountFSEP);
+			
+			create_list_course(id, "sunday", "Hadas Hasidim", "FSE", CountFSE);
+			
+			create_list_course(id, "sunday", "Avishai Kraif", "Data struction-lab", CountDatastrucL);
+
 			create(id, "monday");
-			create_list_course(id, "monday", "Svetlana Rusin", "PSE-lab");
-			create_list_course(id, "monday", "Alexander Chorkin", "AFL");
+			create_list_course(id, "monday", "Svetlana Rusin", "PSE-lab", CountPSEL);
+			
+			create_list_course(id, "monday", "Alexander Chorkin", "AFL", CountAFL);
+			
+
 			create(id, "tuesday");
-			create_list_course(id, "tuesday", "Irena revayev", "Data struction");
-			create_list_course(id, "tuesday", "Marina Litbak", "PSE");
-			create_list_course(id, "tuesday", "Alexander Shkolnik", "AFL-lab");
+			create_list_course(id, "tuesday", "Irena revayev", "Data struction", CountDatastruc);
+			
+
+			create_list_course(id, "tuesday", "Marina Litbak", "PSE", CountPSE);
+			
+			create_list_course(id, "tuesday", "Alexander Shkolnik", "AFL-lab", CountAFLL);
+			
 			create(id, "wednesday");
 			create(id, "thursday");
 			create(id, "friday");
@@ -175,20 +338,31 @@ void timeTableOption()
 			cin >> choise;
 		}
 		if (choise == 0)
+			
 		{
 			create(id, "sunday");
-			create_list_course(id, "sunday", "Hadas Hasidim", "FSE");
-			create_list_course(id, "sunday", "Avishai Kraif", "Data struction-lab");
+			create_list_course(id, "sunday", "Hadas Hasidim", "FSE", CountFSE);
+
+			
+			create_list_course(id, "sunday", "Avishai Kraif", "Data struction-lab", CountDatastrucL);
+			
 			create(id, "monday");
-			create_list_course(id, "monday", "Alexander Chorkin", "AFL");
-			create_list_course(id, "monday", "Isabel Meif", "FSE-practice");
+			create_list_course(id, "monday", "Alexander Chorkin", "AFL", CountAFL);
+			
+
+			create_list_course(id, "monday", "Isabel Meif", "FSE-practice", CountFSEP);
+			
 			create(id, "tuesday");
-			create_list_course(id, "tuesday", "Irena revayev", "Data struction");
-			create_list_course(id, "tuesday", "Alexander Shkolnik", "AFL-lab");
+			create_list_course(id, "tuesday", "Irena revayev", "Data struction", CountDatastruc);
+			
+
+			create_list_course(id, "tuesday", "Alexander Shkolnik", "AFL-lab", CountAFLL);
+			
 			create(id, "wednesday");
-			create_list_course(id, "wedneday", "Marina Litbak", "PSE");
+			create_list_course(id, "wednesday", "Marina Litbak", "PSE", CountPSE);
+			
 			create(id, "thursday");
-			create_list_course(id, "thursday", "Svetlana Rusin", "PSE-lab");
+			create_list_course(id, "thursday", "Svetlana Rusin", "PSE-lab", CountPSEL);
 			create(id, "friday");
 			break;
 		}
@@ -231,6 +405,113 @@ void StudentRequest()
 
 
 }
+
+int DeleteChoiseCourse(int id,char* subject) {
+	int h = 0, k = 0;
+	list *s = head;
+
+
+	while (s->data->ID != id)
+	{
+		s = s->next;
+	}
+
+	daysinweek *t = s->data->head; //t =יום
+	while (t != NULL)
+	{
+		details_courses *course = t->courses;			//מצביע לקורסים של אותו יום
+		if (course != NULL)
+		{
+			if (course->next != NULL)
+			{
+				if (strcmp(course->name_course, subject) == 0)
+				{
+					s->data->head->courses = course->next;
+					delete course->lecture;
+					delete course->name_course;
+					delete course;
+					course = NULL;
+					break;
+					k++;
+				}
+				else
+				{
+					details_courses *pos = course;
+					details_courses *sop = course->next;			//התא הבא
+					while (sop != NULL)
+					{
+
+						if (strcmp(sop->name_course, subject) == 0)
+						{
+							pos->next = sop->next;
+							delete sop->lecture;
+							delete sop->name_course;
+							delete sop;
+
+							break;
+						}
+						pos = pos->next;
+						sop = sop->next;
+						k++;
+					}
+				}
+			}
+		}
+		t = t->next;
+	}
+
+	return k;
+}
+
+void printReportUS(char* filename) {
+	char val;
+	ifstream file(filename);
+	if (!file)//if file couldnt open, throws an exception
+		throw runtime_error("file is empty");
+	file.close();//close the file
+	file.open(filename);
+	cout << "************************The users Login Report:************************" << endl;
+	while (!file.eof()) {
+		if (filename) {
+
+			string val;
+			getline(file, val);
+			cout << val;
+		}
+		cout << endl;
+	}
+
+}
+void ReportusersLogin(char* name)
+{
+	char line[30];
+	int flag = 0;
+	 ifstream newFile;
+	 newFile.open("Reportusers.txt");
+	if (newFile.is_open())
+	{
+		while (newFile >> line)
+		{
+			if (strcmp(line, name) == 0)
+			{
+				flag = 1;
+			}
+		}
+		if (flag == 1)
+			newFile.close();
+		else
+		{
+			ofstream newFile;
+			newFile.open("Reportusers.txt", ios::app);
+			newFile << name << endl;
+			newFile.close();
+		}
+
+	}
+	else
+		cout << "Unable to open file";
+
+}
 char login_user(char* users) {
 	///////////students/////////////
 	int numberOfpeople = 0, j = 0, i = 0;
@@ -262,13 +543,20 @@ char login_user(char* users) {
 				{
 					j = 1;
 					file >> pass;
-					if (pass[0] == 'A')
+					if (pass[0] == 'A') {
 						type = 'A';
-					else if (pass[0] == 'B')
+						ReportusersLogin(s1);
+					}
+					else if (pass[0] == 'B') {
 						type = 'B';
-					else if (pass[0] == 'C')
+						ReportusersLogin(s1);
+					}
+					else if (pass[0] == 'C') {
 						type = 'C';
+						ReportusersLogin(s1);
+					}
 					break;
+
 				}
 				cout << "incorrect password!" << endl;
 			}
@@ -305,7 +593,7 @@ void login(char* users)
 					cout << "-------------Menu--------------------\n1.To print all users\n";
 					cout << "2.To change user classification\n3.To backup the system\n4.To restart the system\n";
 					cout << "5.To add user\n6.To producing a computer BUGS report\n7.To reset password\n";
-					cout << "8.security system suplied\n"<<"9. exit from the system" << endl;
+					cout << "8.security system suplied\n"<< "9.User Login Report\n"<<"10. exit from the system" << endl;
 					cin >> choice;
 					switch (choice)
 					{
@@ -363,22 +651,21 @@ void login(char* users)
 						case 9:
 						{
 							system("cls");
-							cout << "goodbye user!" << endl;
+							printReportUS("Reportusers.txt");
 							break;
 						}
 						case 10:
 						{
 							system("cls");
 							cout << "goodbye!" << endl;
-							exit(1);
+							break;
 						}
 						default: {
 							cout << "Wrong choice!" << endl;
 
 						}
 					}//end {} of switch.
-					system("cls");
-				} while (choice != 9);
+				} while (choice !=10);
 				break;//to end switch case
 			}
 			case 'B':
@@ -395,9 +682,14 @@ void login(char* users)
 					switch (choice)
 					{
 						/*case 1:
-							ChangeNumInCours();
-						case 2:
-							add_courses();*/
+							ChangeNumInCours();*/
+					case 2: 
+					{
+						system("cls");
+						add_courses();
+						break;
+					}
+							
 					case 3:
 					{
 						system("cls");
@@ -411,25 +703,40 @@ void login(char* users)
 						system("cls");
 						StudentRequest();
 						break;
-					}	/*
+					}	
 					case 5:
+						system("cls");
 						numStudentIncourse();
-						*/
+						break;
+						
 					case 6:
 					{
 						system("cls");
 						sendMessage();
 						break;
-					}	/*
-					case 7:
-						DeleteChoiseCourse();
-						*/
+					}	
+					case 7: {
+						char str[100], *subject;
+						system("cls");
+						cout << "Enter id:" << endl;
+						cin >> id;
+						cout << "Enter subject:" << endl;
+						cin >> str;
+						subject = new char[strlen(str) + 1];
+						strcpy(subject,str);
+						if (DeleteChoiseCourse(id,subject) == 0)
+							cout << "This course does not exist . \n";
+						else
+							cout << "Course successfully removed!\n";
+						break;
+					}
 					case 8:
 					{
 						system("cls");
 						add_choice_courses();
 						break;
-					}	/*
+					}
+					/*
 					case 9:
 						addExamList();
 						*/
@@ -474,6 +781,12 @@ void login(char* users)
 					{
 						system("cls");
 						timeTableOption();
+						break;
+					}
+					case 3:
+					{
+						system("cls");
+						add_choice_courses();
 						break;
 					}
 					case 4:
@@ -638,7 +951,7 @@ void addUser() {
 void add_choice_courses() {
 
 	int choice, id;
-	cout << "add choice courses:\n1. English with Roman in sunday\n2. English with Gabriel in friday\n3. Tenis with Ariel in monday\n4.frence with Yael in wednesday\n5. wine with Sapir in thursday" << endl;
+	cout << "add choice courses:\n1. English with Roman in sunday\n2. English with Gabriel in friday\n3. Tenis with Ariel in monday\n4.french with Yael in wednesday\n5. wine with Sapir in thursday" << endl;
 	cin >> choice;
 	cout << "enter id:" << endl;
 	cin >> id;
@@ -652,13 +965,20 @@ void add_choice_courses() {
 		{
 			s = s->next;
 		}
-		char name_lecture[6] = { "Roman" };
-		char name_course[] = { "English" };
-		char day[] = { "sunday" };
-		course_choice->lecture = name_lecture;
-		course_choice->name_course = name_course;
-		course_choice->next = NULL;
-		create(id,day);
+		if (check_place(CountEnglishR) == true) {
+			char name_lecture[6] = { "Roman" };
+			char name_course[] = { "English" };
+			char day[] = { "sunday" };
+			course_choice->lecture = name_lecture;
+			course_choice->name_course = name_course;
+			course_choice->next = NULL;
+			create_list_course(id, "sunday", "Roman Michaelan", "English", CountEnglishR);
+			
+		}
+		else
+		{
+			cout << "There is no places in this course" << endl;
+		}
 		break;
 	}
 	case 2: {
@@ -666,13 +986,20 @@ void add_choice_courses() {
 		{
 			s = s->next;
 		}
-		char name_lecture[] = { "Gabriel" };
-		char name_course[] = { "English" };
-		char day[] = { "friday" };
-		course_choice->lecture = name_lecture;
-		course_choice->name_course = name_course;
-		course_choice->next = NULL;
-		create(id, day);
+		if (check_place(CountEnglishG) == true) {
+			char name_lecture[] = { "Gabriel" };
+			char name_course[] = { "English" };
+			char day[] = { "friday" };
+			course_choice->lecture = name_lecture;
+			course_choice->name_course = name_course;
+			course_choice->next = NULL;
+			create_list_course(id, "friday", "Gabriel Ben Ami", "English", CountEnglishG);
+			
+		}
+		else
+		{
+			cout << "There is no places in this course" << endl;
+		}
 		break;
 	}
 	case 3:
@@ -681,13 +1008,20 @@ void add_choice_courses() {
 		{
 			s = s->next;
 		}
-		char name_lecture[] = { "Ariel" };
-		char name_course[] = { "Tenis" };
-		char day[] = { "monday" };
-		course_choice->lecture = name_lecture;
-		course_choice->name_course = name_course;
-		course_choice->next = NULL;
-		create(id, day);
+		if (check_place(CountTenis) == true) {
+			char name_lecture[] = { "Ariel" };
+			char name_course[] = { "Tenis" };
+			char day[] = { "monday" };
+			course_choice->lecture = name_lecture;
+			course_choice->name_course = name_course;
+			course_choice->next = NULL;
+			create_list_course(id, "monday", "Ariel peretz", "Tenis", CountTenis);
+			
+		}
+		else
+		{
+			cout << "There is no places in this course" << endl;
+		}
 		break;
 	}
 	case 4:
@@ -696,13 +1030,20 @@ void add_choice_courses() {
 		{
 			s = s->next;
 		}
-		char name_lecture[] = { "Yael" };
-		char name_course[] = { "Frence" };
-		char day[] = { "wednesday" };
-		course_choice->lecture = name_lecture;
-		course_choice->name_course = name_course;
-		course_choice->next = NULL;
-		create(id, day);
+		if (check_place(CountFrench) == true) {
+			char name_lecture[] = { "Yael" };
+			char name_course[] = { "French" };
+			char day[] = { "wednesday" };
+			course_choice->lecture = name_lecture;
+			course_choice->name_course = name_course;
+			course_choice->next = NULL;
+			create_list_course(id, "wednesday", "Yael Yaakov", "French", CountFrench);
+			
+		}
+		else
+		{
+			cout << "There is no places in this course" << endl;
+		}
 		break;
 	}
 	case 5:
@@ -711,17 +1052,26 @@ void add_choice_courses() {
 		{
 			s = s->next;
 		}
-		char name_lecture[] = { "Sapir" };
-		char name_course[] = { "Wine" };
-		char day[] = { "thursday" };
-		course_choice->lecture = name_lecture;
-		course_choice->name_course = name_course;
-		course_choice->next = NULL;
-		create(id, day);
+		if (check_place(CountWine) == true) {
+			char name_lecture[] = { "Sapir" };
+			char name_course[] = { "Wine" };
+			char day[] = { "thursday" };
+			course_choice->lecture = name_lecture;
+			course_choice->name_course = name_course;
+			course_choice->next = NULL;
+			create_list_course(id, "thursday", "Sapir Dayan", "Wine", CountWine);
+	
+		}
+		else
+		{
+			cout << "There is no places in this course" << endl;
+		}
 		break;
 	}
 
-	default:
+	default: {
+		cout << "Wrong choice!" << endl;
+	}
 		break;
 	}
 
@@ -1034,131 +1384,155 @@ void add_courses() {
 	int id,choice;
 	cout << "Enter student's id: " << endl;
 	cin >> id;
-	cout << "Courses(Lectures):\n1.AFL- Sunday\t\t\t2.AFL-Monday\t\t\t3.AFL-Wedneaday\n4.PSE-Monday\t\t\t5.PSE-Tuesday\n6.FSE-Sunday\t\t\t7.FSE-Thursday\n8.Data structure-Tuesday\t\t\t9.Data structure-Wednesday" << endl;
-	cout << "Courses(Lab/Practice):\n10.AFL- Sunday\t\t\t11.AFL-Monday\t\t\t12.AFL-Tuesday\n13.PSE-Monday\t\t14.PSE-Wednesday\n15.FSE-Sunday\t\t16.FSE-Monday\n17.Data structure-Sunday\t\t18.Data structure-Monday\t\t19.Data structure-Tuesday" << endl;
+	cout << "Courses(Lectures):\n1.AFL- Sunday\t\t\t2.AFL-Monday\t\t\t3.AFL-Wedneaday\n4.PSE-Monday\t\t\t5.PSE-Tuesday\n6.FSE-Sunday\t\t\t7.FSE-Thursday\n8.Data structure-Tuesday\t9.Data structure-Wednesday" << endl;
+	cout << "Courses(Lab/Practice):\n10.AFL- Sunday\t\t\t11.AFL-Monday\t\t\t12.AFL-Tuesday\n13.PSE-Monday\t\t\t14.PSE-Wednesday\n15.FSE-Sunday\t\t\t16.FSE-Monday\n17.Data structure-Sunday\t18.Data structure-Monday\t19.Data structure-Tuesday" << endl;
 	cin >> choice;
 	switch (choice)
 	{
 	case 1:
 	{
 		check(id, "AFL");
-		create_list_course(id, "sunday", "Alexander chorkin", "AFL");
+		create_list_course(id, "sunday", "Alexander chorkin", "AFL", CountAFL);
+
 		break;
 	}
 	case 2:
 	{
 		check(id, "AFL");
-		create_list_course(id, "monday", "Alexander chorkin", "AFL");
+		create_list_course(id, "monday", "Alexander chorkin", "AFL", CountAFL);
+
 		break;
 	}
 	case 3: 
 	{
 		check(id, "AFL");
-		create_list_course(id, "wednesday", "Alexander chorkin", "AFL");
+		create_list_course(id, "wednesday", "Alexander chorkin", "AFL", CountAFL);
+		
+
 		break;
 	}
 	case 4: 
 	{
 		check(id, "PSE");
-		create_list_course(id, "monday", "Marina litbak", "PSE");
+		create_list_course(id, "monday", "Marina litbak", "PSE", CountPSE);
+		
 		break;
 	}
 	case 5: 
 	{
 		check(id, "PSE");
-		create_list_course(id, "tuesday", "Marina litbak", "PSE");
+		create_list_course(id, "tuesday", "Marina litbak", "PSE", CountPSE);
+		
 		break;
 	}
 	case 6: 
 	{
 		check(id, "FSE");
-		create_list_course(id, "sunday", "Hadas hasidim", "FSE");
-
+		create_list_course(id, "sunday", "Hadas hasidim", "FSE", CountFSE);
+		
 		break;
 	}
 	case 7: 
 	{
 		check(id, "FSE");
-		create_list_course(id, "thursday", "Hadas Hasidim ", "FSE");
+		create_list_course(id, "thursday", "Hadas Hasidim ", "FSE", CountFSE);
+		
 		break;
 	}
 	case 8: 
 	{
 		check(id, "Data structure");
-		create_list_course(id, "tuesday", "Irena Revayev", "Data structure");
+		create_list_course(id, "tuesday", "Irena Revayev", "Data structure",CountDatastruc);
+
 		break;
 	}
 	case 9: 
 	{
 		check(id, "Data structure");
-		create_list_course(id, "wednesday", "Irena Revayev", "Data structure");
+		create_list_course(id, "wednesday", "Irena Revayev", "Data structure", CountDatastruc);
+		
+
 		break;
 	}
 	case 10:
 	{
 		check(id, "AFL-lab");
-		create_list_course(id, "sunday", "Alexander Shkolnik", "AFL-lab");
+		create_list_course(id, "sunday", "Alexander Shkolnik", "AFL-lab", CountAFLL);
+		
 
 		break;
 	}
 	case 11:
 	{
 		check(id, "AFL-lab");
-		create_list_course(id, "monday", "Alexander Shkolnik", "AFL-lab");
+		create_list_course(id, "monday", "Alexander Shkolnik", "AFL-lab", CountAFLL);
+		
 
 		break;
 	}
 	case 12: 
 	{
 		check(id, "AFL-lab");
-		create_list_course(id, "tuesday", "Alexander Shkolnik", "AFL-lab");
+		create_list_course(id, "tuesday", "Alexander Shkolnik", "AFL-lab", CountAFLL);
+		
 		break;
 	}
 	case 13:
 	{
 		check(id, "PSE-lab");
-		create_list_course(id, "monday", "Svetlana Rusin", "PSE-lab");
+		create_list_course(id, "monday", "Svetlana Rusin", "PSE-lab", CountPSEL);
+		
+
 		break;
 	}
 	case 14: 
 	{
 		check(id, "PSE-lab");
-		create_list_course(id, "wednesday", "Svetlana Rusin", "PSE-lab");
+		create_list_course(id, "wednesday", "Svetlana Rusin", "PSE-lab", CountPSEL);
+		
+
 
 		break;
 	}
 	case 15: 
 	{
 		check(id, "FSE-practice");
-		create_list_course(id, "sunday", "Isabel meif", "FSE-practice");
+		create_list_course(id, "sunday", "Isabel meif", "FSE-practice", CountFSEP);
+		
 
 		break;
 	}
 	case 16:
 	{
 		check(id, "FSE-practice");
-		create_list_course(id, "monday", "Isabel meif", "FSE-practice");
+		create_list_course(id, "monday", "Isabel meif", "FSE-practice", CountFSEP);
+		
 
 		break;
 	}
 	case 17:
 	{
 		check(id, "Data structure-lab");
-		create_list_course(id, "sunday", "Avishay Kraif", "Data structure-lab");
+		create_list_course(id, "sunday", "Avishay Kraif", "Data structure-lab", CountDatastrucL);
+		
 
 		break;
 	}
 	case 18: 
 	{
 		check(id, "Data structure-lab");
-		create_list_course(id, "monday", "Avishay Kraif", "Data structure-lab");
+		create_list_course(id, "monday", "Avishay Kraif", "Data structure-lab", CountDatastrucL);
+		
+
 
 		break;
 	}
 	case 19:
 	{
 		check(id, "Data structure-lab");
-		create_list_course(id, "tuesday", "Avishay Kraif", "Data structure-lab");
+		create_list_course(id, "tuesday", "Avishay Kraif", "Data structure-lab", CountDatastrucL);
+		
+
 		break;
 	}
 
@@ -1170,9 +1544,19 @@ void add_courses() {
 
 
 }
+bool check_place(int num) {
+	if (num != 0) {
+		return true;
+	}
+	return false;
+}
 int main()
 {
+	ofstream report;
+	report.open("Reportusers.txt");
 	char* fileName = NULL;
-
 	login("users.txt");
+	ofstream reportNew;
+	reportNew.open("Reportusers.txt");
+
 }
