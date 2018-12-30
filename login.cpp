@@ -378,7 +378,7 @@ void login(char* users)
 						}
 					}//end {} of switch.
 					system("cls");
-				} while (choice != 8);
+				} while (choice != 9);
 				break;//to end switch case
 			}
 			case 'B':
@@ -989,166 +989,176 @@ void check(int id, char* subject)
 	}
 
 	daysinweek *t = s->data->head; //t =יום
-	while (t != NULL)
+	while (t!=NULL)
 	{
-		cout << "FIRST WHILE" << endl;
-		details_courses *k = t->courses; //k==קורס ביום t
-		details_courses* pos = k;
-		details_courses* tos = k->next;
-		cout << "www" << endl;
-
-		if (h==0 && strcmp(k->name_course, subject) == 0) //אם הקורס בתחילת הרשימה
+		details_courses *course = t->courses;			//מצביע לקורסים של אותו יום
+		if (course != NULL)
 		{
-			cout << "1 IF" << endl;
-
-			delete k->lecture;
-			delete k->name_course;
-			delete k;
-			s->data->head->courses = tos;
-			break;
-		}
-
-		else				//אם הקורס באמצע הרשימה
-		{
-			while (tos != NULL && (strcmp(tos->name_course,subject)!=0))
+			if (course->next != NULL)
 			{
-				cout << "2 WHILE" << endl;
-				h++;
-				k = k->next;
-				pos = pos->next; //data
-			    tos=tos->next; //next data
-
-			}
-			if (strcmp(tos->name_course, subject) == 0)
-			{
-				if (tos->next==NULL)
+				if (strcmp(course->name_course, subject) == 0)
 				{
-					cout << "2 IF" << endl;
-					pos->next = NULL;
-					delete tos->lecture;
-					delete tos->name_course;
-					delete tos;
+					s->data->head->courses = course->next;
+					delete course->lecture;
+					delete course->name_course;
+					delete course;
+					course = NULL;
+					break;
 				}
 				else
 				{
-					cout << "ELSE" << endl;
+					details_courses *pos = course;
+					details_courses *sop = course->next;			//התא הבא
+					while (sop != NULL)
+					{
 
-					pos = tos->next;
-					delete tos->lecture;
-					delete tos->name_course;
-					delete tos;
+						if (strcmp(sop->name_course, subject) == 0)
+						{
+							pos->next = sop->next;
+							delete sop->lecture;
+							delete sop->name_course;
+							delete sop;
+
+							break;
+						}
+						pos = pos->next;
+						sop = sop->next;
+					}
 				}
-
-
 			}
 		}
-		cout << "ggg" << endl;
 		t = t->next;
 	}
-
 }
 void add_courses() {
 	int id,choice;
 	cout << "Enter student's id: " << endl;
 	cin >> id;
 	cout << "Courses(Lectures):\n1.AFL- Sunday\t\t\t2.AFL-Monday\t\t\t3.AFL-Wedneaday\n4.PSE-Monday\t\t\t5.PSE-Tuesday\n6.FSE-Sunday\t\t\t7.FSE-Thursday\n8.Data structure-Tuesday\t\t\t9.Data structure-Wednesday" << endl;
-	cout << "Courses(Lab/Practice):\n10.AFL- Sunday\t\t\t11.AFL-Monday\t\t\t12.AFL-Tuesday\n13.PSE-Monday\t\t\t14.PSE-Wednesday\n15.FSE-Sunday\t\t\t16.FSE-Monday\n17.Data structure-Sunday\t\t\t18.Data structure-Monday\t\t\t19.Data structure-Tuesday" << endl;
+	cout << "Courses(Lab/Practice):\n10.AFL- Sunday\t\t\t11.AFL-Monday\t\t\t12.AFL-Tuesday\n13.PSE-Monday\t\t14.PSE-Wednesday\n15.FSE-Sunday\t\t16.FSE-Monday\n17.Data structure-Sunday\t\t18.Data structure-Monday\t\t19.Data structure-Tuesday" << endl;
 	cin >> choice;
 	switch (choice)
 	{
 	case 1:
 	{
 		check(id, "AFL");
+		create_list_course(id, "sunday", "Alexander chorkin", "AFL");
 		break;
 	}
 	case 2:
 	{
 		check(id, "AFL");
+		create_list_course(id, "monday", "Alexander chorkin", "AFL");
 		break;
 	}
 	case 3: 
 	{
 		check(id, "AFL");
+		create_list_course(id, "wednesday", "Alexander chorkin", "AFL");
 		break;
 	}
 	case 4: 
 	{
 		check(id, "PSE");
+		create_list_course(id, "monday", "Marina litbak", "PSE");
 		break;
 	}
 	case 5: 
 	{
 		check(id, "PSE");
+		create_list_course(id, "tuesday", "Marina litbak", "PSE");
 		break;
 	}
 	case 6: 
 	{
 		check(id, "FSE");
+		create_list_course(id, "sunday", "Hadas hasidim", "FSE");
+
 		break;
 	}
 	case 7: 
 	{
-		check(id, "Data structure");
+		check(id, "FSE");
+		create_list_course(id, "thursday", "Hadas Hasidim ", "FSE");
 		break;
 	}
 	case 8: 
 	{
 		check(id, "Data structure");
+		create_list_course(id, "tuesday", "Irena Revayev", "Data structure");
 		break;
 	}
 	case 9: 
 	{
 		check(id, "Data structure");
+		create_list_course(id, "wednesday", "Irena Revayev", "Data structure");
 		break;
 	}
 	case 10:
 	{
 		check(id, "AFL-lab");
+		create_list_course(id, "sunday", "Alexander Shkolnik", "AFL-lab");
+
 		break;
 	}
 	case 11:
 	{
 		check(id, "AFL-lab");
+		create_list_course(id, "monday", "Alexander Shkolnik", "AFL-lab");
+
 		break;
 	}
 	case 12: 
 	{
 		check(id, "AFL-lab");
+		create_list_course(id, "tuesday", "Alexander Shkolnik", "AFL-lab");
 		break;
 	}
 	case 13:
 	{
 		check(id, "PSE-lab");
+		create_list_course(id, "monday", "Svetlana Rusin", "PSE-lab");
 		break;
 	}
 	case 14: 
 	{
 		check(id, "PSE-lab");
+		create_list_course(id, "wednesday", "Svetlana Rusin", "PSE-lab");
+
 		break;
 	}
 	case 15: 
 	{
 		check(id, "FSE-practice");
+		create_list_course(id, "sunday", "Isabel meif", "FSE-practice");
+
 		break;
 	}
 	case 16:
 	{
 		check(id, "FSE-practice");
+		create_list_course(id, "monday", "Isabel meif", "FSE-practice");
+
 		break;
 	}
 	case 17:
 	{
 		check(id, "Data structure-lab");
+		create_list_course(id, "sunday", "Avishay Kraif", "Data structure-lab");
+
 		break;
 	}
 	case 18: 
 	{
 		check(id, "Data structure-lab");
+		create_list_course(id, "monday", "Avishay Kraif", "Data structure-lab");
+
 		break;
 	}
 	case 19:
 	{
 		check(id, "Data structure-lab");
+		create_list_course(id, "tuesday", "Avishay Kraif", "Data structure-lab");
 		break;
 	}
 
