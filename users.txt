@@ -1,13 +1,3 @@
-eden david 319082327 edenda2@ac.sce.ac.il Ss123456 INFO
-sapir sabhat 205623374 sapirsa3@ac.sce.ac.il Ww123456 INFO
-shilat apel 205608383 shilaap@ac.sce.ac.il Kk123456 INFO
-yael buisine 341353787 yaelbu11@ac.sce.ac.il Oo123456 INFO
-mazal zanah 205312011 mazalza@ac.sce.ac.il Aa123456 SEC
-yael cohen 341557632 yaelco@ac.sce.ac.il Bb123456 SEC
-dorit uziel 213398711 dorituz@ac.sce.ac.il Cc123456 SEC
-liat hagag 314397522 liatha@ac.sce.ac.il Dd123456 SEC
-michal peretz 312034456 michalpe1@ac.sce.ac.il Mm123456 S
-daniel nahmias 347890012 danielna1@ac.sce.ac.il Rr123456 S
-meir david 205576331 meirda1@ac.sce.ac.il Pp123456 S
-noy ifrah 204774321 noyif1@ac.sce.ac.il Nn123456 S
-noy cohen 319083389 noyco@ac.sce.ac.il Qq123456 S
+sapir sabhat 205623374 sapirsa3 Ww123456 A
+aa aa 222222222 aaaa74@ac.sce.ac.il Ee123456 B
+
