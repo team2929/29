@@ -52,6 +52,7 @@ int CountTenis = 5;
 int CountFrench = 5;
 int CountWine = 5;
 
+void AvailableSpaces();
 bool checkID_adduser(int);
 void timeTableOption(int);
 void addUser();
@@ -73,7 +74,7 @@ void StudentRequest();
 void print_timetable(int);
 void add_courses();
 void security();
-void shareTimeTable();
+void requestTOlecturer(int id);
 void printExamTable(int id,char* = NULL , char* = NULL, char* = NULL, char* = NULL);
 int DeleteChoiseCourse(int,char*);
 void numStudentIncourse();
@@ -127,12 +128,8 @@ void Gradeprint(int id) {
 	Id = ID;
 	ofstream Gfile(string(Id + "Grade.txt").c_str(), ios::app);
 	srand((unsigned)time(NULL));
-	cout << "FSE-Foundations of software engineering" << endl;
-	cout <<"PSE - Principle of software engineering" << endl;
-	cout << "AFL - Automata and formal languages" << endl;
-	Gfile << "------------------------------------------------------------------------------------------------ - " << endl;
 	Gfile << "COURSE\t\t | LECTURE\t\t | GRADE" << endl;
-	Gfile<<"------------------------------------------------------------------------------------------------ - "<<endl;
+	Gfile << endl;
 	Gfile << "Data structure\t|Irena revayev\t\t|" << rand() % (101 - 20) + 20 << endl;
 	Gfile << "AFL\t\t|Alexander Chorkin\t\t|" << rand() % (101 - 20) + 20 << endl;
 	Gfile << "FSE\t\t|Hadas Hasidim\t\t|" << rand() % (101 - 20) + 20 << endl;
@@ -142,32 +139,39 @@ void Gradeprint(int id) {
 	cout << "do you want to print the report?\n(y-yes,n-no)" << endl;
 	char cha;
 	cin >> cha;
+
 	if (cha='y')
 	{
 		ifstream e(string(Id + "Grade.txt").c_str());
 		string f;
+		cout << "FSE-Foundations of software engineering" << endl;
+		cout << "PSE - Principle of software engineering" << endl;
+		cout << "AFL - Automata and formal languages" << endl;
+		cout << endl;
 		while (getline(e, f))
 		{
-			cout << f;
+			cout << f<<endl;
 		}
 		e.close();
-	}
-	
+	}	
 }
-
 void Change_num_place() {
 	int choice, num, dori;
 	cout << "please enter number to Increase or decrease the number of students in the course" << endl;
 	cin >> num;
-	cout << "enter 1-to Increase \n 2-to decrease" << endl;
-	cin >> dori;
-	cout << "please enter your menu choise(1-9)" << endl;
 	do
 	{
+		cout << "enter 1-to Increase \n 2-to decrease" << endl;
+		cin >> dori;
+	} while (dori!=1 && dori!=2);
+
+
+	cout << "please enter your menu choise(1-9)" << endl;
+
 		cout << "-------------course Menu-----------------\n1.FSE\n";
 		cout << "2.FSE-practice\n3.PSE\n4.PSE-lab\n";
 		cout << "5.AFL\n6.AFL-lab\n7.Data struction\n";
-		cout << "8.Data struction-lab\n" << endl;
+		cout << "8.Data struction-lab\n" << "9. English-Roman\n"<<"10.English-Gabriel\n11.French\n12.Tenis\n13.Wine\n";
 
 		cin >> choice;
 		switch (choice)
@@ -177,68 +181,91 @@ void Change_num_place() {
 			system("cls");
 			Changecountplaces(num, dori, CountFSE);
 			cout << CountFSE << endl;
-			exit(1);
 			break;
 		}
 		case 2:
 		{
 			system("cls");
 			Changecountplaces(num, dori, CountFSEP);
-			exit(1);
 			break;
 		}
 		case 3:
 		{
 			system("cls");
 			Changecountplaces(num, dori, CountPSE);
-			exit(1);
 			break;
 		}
 		case 4:
 		{
 			system("cls");
 			Changecountplaces(num, dori, CountPSEL);
-			exit(1);
 			break;
 		}
 		case 5:
 		{
 			system("cls");
 			Changecountplaces(num, dori, CountAFL);
-			exit(1);
 			break;
 		}
 		case 6:
 		{
 			system("cls");
 			Changecountplaces(num, dori, CountAFLL);
-			exit(1);
 			break;
 		}
 		case 7:
 		{
 			system("cls");
 			Changecountplaces(num, dori, CountDatastruc);
-			exit(1);
 			break;
 		}
 		case 8:
 		{
 			system("cls");
 			Changecountplaces(num, dori, CountDatastrucL);
-			exit(1);
 			break;
 		}
-
+		case 9:
+		{
+			system("cls");
+			Changecountplaces(num, dori, CountEnglishR);
+			break;
+		}
+		case 10:
+		{
+			system("cls");
+			Changecountplaces(num, dori, CountEnglishG);
+			break;
+		}
+		case 11:
+		{
+			system("cls");
+			Changecountplaces(num, dori, CountFrench);
+			break;
+		}
+		case 12:
+		{
+			system("cls");
+			Changecountplaces(num, dori, CountTenis);
+			break;
+		}
+		case 13:
+		{
+			system("cls");
+			Changecountplaces(num, dori, CountWine);
+			break;
+		}
 		default: {
 			cout << "Wrong choice!" << endl;
 		}
 		}
 		system("cls");
-	} while (choice != 8);
+		cout << "Number of participants successfully changed" << endl;
+
+
 }
-void Changecountplaces(int num, int dori, int& count) {
-	if (dori == 2)
+void Changecountplaces(int num, int choice, int& count) {
+	if (choice == 2)
 		count = abs(num - count);
 	else
 		count = num + count;
@@ -264,7 +291,6 @@ void numStudentIncourse() {
 
 			
 	}
-
 void create_list_course(int id,char* day,char* nlecture, char* ncourse, int& num) {
 	if (check_place(num) == true) {
 		list* s = head;
@@ -309,7 +335,7 @@ void timeTableOption(int id)
 	char*ID = new char[10];
 	strcpy(ID, convert_to_char(id));
 	///////////////
-	ofstream ofile, Efile,Gfile;
+	ofstream ofile, Efile,Gfile,file1;
 	string Id;
 	Id = ID;
 	ofile.open(string(Id + "Courses.txt").c_str());
@@ -362,6 +388,7 @@ void timeTableOption(int id)
 			create(id, "friday");
 
 
+
 			ofile << "PSE\t\t" << "Marina Litbak" << endl;
 			ofile << "Data structur\t" << "Irena revayev" << endl;
 			ofile << "FSE\t\t" << "Hadas Hasidim" << endl;
@@ -370,7 +397,7 @@ void timeTableOption(int id)
 			ofile << "FSE - practice\t" << "Isabel Meif" << endl;
 			ofile << "AFL-lab\t\t" << "Alexander Shkolnik" << endl;
 			ofile << "PSE-lab\t\t" << "Svetlana Rusin" << endl;
-			Efile << "--------------------------------------------------------------------------------------------" << endl;
+			//Efile << "--------------------------------------------------------------------------------------------" << endl;
 			Efile << "Exam\t\t\t\t\tDate\t\t\tDay\t\t\tA/B | " << endl;
 			Efile << "Principles of language software\t\t16/1/2019\t\tWednesday\t\tA |" << endl;
 			Efile << "Automata and formal languages\t\t22/1/2019\t\tTuesday\t\t\tA| " << endl;
@@ -421,7 +448,7 @@ void timeTableOption(int id)
 
 
 			create(id, "tuesday");
-			create_list_course(id, "tuesday", "Irena revayev", "Data structur", CountDatastruc);
+			create_list_course(id, "tuesday", "Irena revayev", "Data structurion", CountDatastruc);
 
 
 			create_list_course(id, "tuesday", "Marina Litbak", "PSE", CountPSE);
@@ -431,6 +458,9 @@ void timeTableOption(int id)
 			create(id, "wednesday");
 			create(id, "thursday");
 			create(id, "friday");
+
+
+
 
 			ofile << "PSE\t\t" << "Marina Litbak" << endl;
 			ofile << "Data structur\t" << "Irena revayev" << endl;
@@ -503,6 +533,9 @@ void timeTableOption(int id)
 			create_list_course(id, "thursday", "Svetlana Rusin", "PSE-lab", CountPSEL);
 			create(id, "friday");
 
+
+
+
 			ofile << "PSE\t\t" << "Marina Litbak" << endl;
 			ofile << "Data structur\t" << "Irena revayev" << endl;
 			ofile << "FSE\t\t" << "Hadas Hasidim" << endl;
@@ -511,6 +544,8 @@ void timeTableOption(int id)
 			ofile << "FSE - practice\t" << "Isabel Meif" << endl;
 			ofile << "AFL-lab\t\t" << "Alexander Shkolnik" << endl;
 			ofile << "PSE-lab\t\t" << "Svetlana Rusin" << endl;
+
+
 			Efile << "--------------------------------------------------------------------------------------------" << endl;
 			Efile << "Exam\t\t\t\t\tDate\t\t\tDay\t\t\tA / B | " << endl;
 			Efile << "Principles of language software\t\t16/1/2019\t\tWednesday\t\tA  |" << endl;
@@ -606,7 +641,6 @@ void StudentRequest()
 
 
 }
-
 int DeleteChoiseCourse(int id,char* subject) {
 	int h = 0, k = 0;
 	list *s = head;
@@ -663,7 +697,6 @@ int DeleteChoiseCourse(int id,char* subject) {
 
 	return k;
 }
-
 void printReportUS(char* filename) {
 	char val;
 	ifstream file(filename);
@@ -717,7 +750,8 @@ char login_user(char* users) {
 	///////////students/////////////
 	int numberOfpeople = 0, j = 0, i = 0;
 	char pass[9], password[9], type = NULL;
-	while (j != 1)
+
+	while (j != 3)
 	{
 		ifstream file(users);
 		if (!file)//if file couldnt open, throws an exception
@@ -731,6 +765,7 @@ char login_user(char* users) {
 		strcpy(s1, name);
 		cout << "Enter password:\n";
 		cin >> password;
+
 		while (file >> val)
 		{
 
@@ -742,33 +777,46 @@ char login_user(char* users) {
 				file >> pass;
 				if (strcmp(pass, password) == 0)
 				{
-					j = 1;
 					file >> pass;
 					if (pass[0] == 'A') {
 						type = 'A';
 						ReportusersLogin(s1);
+						delete s1;
+						delete s2;
+						return type;
 					}
 					else if (pass[0] == 'B') {
 						type = 'B';
 						ReportusersLogin(s1);
+						delete s1;
+						delete s2;
+						return type;
 					}
 					else if (pass[0] == 'C') {
 						type = 'C';
 						ReportusersLogin(s1);
+						delete s1;
+						delete s2;
+						return type;
 					}
-					break;
-
 				}
 				cout << "incorrect password!" << endl;
+
 			}
+
+
 		}
-		delete s1;
-		delete s2;
 
 		file.close();//close the file
-		return type;
+		j++;
+		if (j==3)
+		{
+			cout << "The security system was activated" << endl;
+			exit(1);
+		}
 
 	}
+
 
 }
 bool CheckID(int id) {
@@ -794,6 +842,36 @@ bool CheckID(int id) {
 
 
 }
+void AvailableSpaces() {
+	cout << "List of courses with available places :" << endl;
+	if (CountFSE>0)
+		cout << "in  Foundations of software engineering the available places is:\t\t" << CountFSE << endl;
+	if (CountFSEP > 0)
+		cout << "in  practice Foundations of software engineering the available places is:\t" << CountFSEP << endl;
+	if (CountPSE > 0)
+		cout << "in  Principle of software engineering the available places is:\t\t\t" << CountPSE << endl;
+	if (CountPSEL >0)
+		cout << "in  lab Principle of software engineering the available places is:\t\t" << CountPSEL << endl;
+	if (CountAFL > 0)
+		cout << "in  Automata and formal languages the available places is:\t\t\t" << CountAFL << endl;
+	if (CountAFLL > 0)
+		cout << "in lab Automata and formal languages the available places is:\t\t\t" << CountAFLL << endl;
+	if (CountDatastruc > 0)
+		cout << "in  Data structure the available places is:\t\t\t\t\t" << CountDatastruc << endl;
+	if (CountDatastrucL > 0)
+		cout << "in lab Data structure the available places is:\t\t\t\t\t" << CountDatastrucL << endl;
+	if (CountEnglishR > 0)
+		cout << "in  english with roman the available places is:\t\t\t\t\t" << CountEnglishR << endl;
+	if (CountEnglishG > 0)
+		cout << "in  english with gabriel the available places is:\t\t\t\t" << CountEnglishG << endl;
+	if (CountTenis > 0)
+		cout << "in  Tenis the available places is:\t\t\t\t\t\t" << CountTenis << endl;
+	if (CountFrench > 0)
+		cout << "in French the available places is:\t\t\t\t\t\t" << CountFrench << endl;
+	if (CountWine > 0)
+		cout << "in  Wine the available places is:\t\t\t\t\t\t" << CountWine << endl;
+
+}
 void login(char* users)
 {
 	int id;
@@ -817,7 +895,7 @@ void login(char* users)
 					cout << "\n------------------------Info menu--------------------\n1.To print all users\n";
 					cout << "2.To change user classification\n3.To backup the system\n4.To restart the system\n";
 					cout << "5.To add user\n6.To producing a computer BUGS report\n7.To reset password\n";
-					cout << "8.security system suplied\n"<< "9.User Login Report\n"<<"10. exit from the system" << endl;
+					cout << "8.security system suplied\n"<< "9.User Login Report\n"<<"10.To change number of people in course\n" << "11.To print Students Request report\n"<<"12.To see number of people in course\n"<<"13. exit from the system" <<endl;
 					cin >> choice;
 					switch (choice)
 					{
@@ -879,6 +957,23 @@ void login(char* users)
 							break;
 						}
 						case 10:
+						{	
+							Change_num_place();
+							break;
+						}
+						case 11:
+						{
+							system("cls");
+							StudentRequest();
+							break;
+						}
+						case 12:
+						{
+							system("cls");
+							numStudentIncourse();
+							break;
+						}
+						case 13:
 						{
 							system("cls");
 							cout << "goodbye!" << endl;
@@ -889,7 +984,7 @@ void login(char* users)
 
 						}
 					}//end {} of switch.
-				} while (choice !=10);
+				} while (choice !=13);
 				break;//to end switch case
 			}
 			case 'B':
@@ -905,10 +1000,15 @@ void login(char* users)
 
 					switch (choice)
 					{
-						/*case 1:
-							ChangeNumInCours();*/
+					case 1:
+					{
+						system("cls");
+						Change_num_place();
+						break;
+					}
 					case 2: 
 					{
+						
 						system("cls");
 						add_courses();
 						break;
@@ -1073,8 +1173,8 @@ void login(char* users)
 				do {
 				cout << "\n-------------------------Student Menu----------------------------\n1.for a user guide\n";
 				cout << "2.To see option for timetable\n3.To ading an elective course\n4.To change course in the timetable\n";
-				cout << "5.To share your timetable\n6.To print grade report\n7.To print your timetable\n";
-				cout << "8.To print test board\n9.To login with anothe user\n";
+				cout << "5.To send requeste to lecture\n6.To print grade report\n7.To print your timetable\n";
+				cout << "8.To print test board\n9.To show available spaces in courses\n"<<"10.To login with another user"<<endl;
 				cin >> choice;
 
 
@@ -1101,15 +1201,31 @@ void login(char* users)
 							cout << "Id must contain 9 digit. enter again:" << endl;
 							cin >> id;
 						}
-
-						strcpy(ID, convert_to_char(id));
-						if (exist_in_file(ID) == false)
+						list *s = head;
+						while (s!=NULL)
 						{
-							timeTableOption(id);
-
+							if (s->data->ID==id)
+							{
+								break;
+							}
+							s = s->next;
 						}
-						else {
-							cout << "Student not exist !"<<endl;
+						if (s->data->count==0)
+						{
+							strcpy(ID, convert_to_char(id));
+							if (exist_in_file(ID) == false)
+							{
+								timeTableOption(id);
+
+							}
+							else {
+								cout << "Student not exist !" << endl;
+							}
+							s->data->count = 1;
+						}
+						else
+						{
+							cout << "you can not choose another schedule!" << endl;
 						}
 						break;
 					}
@@ -1147,7 +1263,25 @@ void login(char* users)
 					case 5:
 					{
 						system("cls");
-						shareTimeTable();
+						char* ID;
+						ID = new char[10];
+						cout << "Enter student's id:" << endl;
+						cin >> id;
+						while (id < 100000000 || id > 999999999)
+						{
+							cout << "Id must contain 9 digit. enter again:" << endl;
+							cin >> id;
+						}
+
+						strcpy(ID, convert_to_char(id));
+						if (exist_in_file(ID) == false)
+						{
+							requestTOlecturer(id);
+						}
+						else
+						{
+							cout << "wrong id" << endl;
+						}
 						break;
 					}
 					case 6:
@@ -1169,7 +1303,7 @@ void login(char* users)
 						{
 							s = s->next;
 						}
-						if ((exist_in_file(ID) == false) && (s->data->count != 1))
+						if ((exist_in_file(ID) == false))
 						{
 							Gradeprint(id);
 						}
@@ -1194,7 +1328,7 @@ void login(char* users)
 						{
 							s = s->next;
 						}
-						if ((exist_in_file(ID) == false)&&(s->data->count!=1))
+						if ((exist_in_file(ID) == false))
 						{
 							print_timetable(id);
 						}
@@ -1230,6 +1364,13 @@ void login(char* users)
 					case 9:
 					{
 						system("cls");
+						AvailableSpaces();
+						break;
+
+					}
+					case 10:
+					{
+						system("cls");
 						cout << "goodbye!" << endl;
 						break;
 					}
@@ -1238,7 +1379,7 @@ void login(char* users)
 					}
 							 break;
 					}
-				} while (choice!=9);
+				} while (choice!=10);
 				break;//to end switch case
 			}
 		}
@@ -1248,12 +1389,41 @@ void security()
 {
 	cout << "Activation Security system gone successfuly " << endl;
 }
-
-void shareTimeTable()
+void requestTOlecturer(int id)
 {
-	cout << "Time table has been sent to your email !" << endl;
+	char R[100],L[30],F[30];
+	char*r,*l,*f;
+	
+	cout << "Enter lecture first name: ";
+	cin >> F;
+	f = new char[strlen(F)+1];
+	strcpy(f,F);
+	cout << "Enter lecture last name: ";
+	cin >>L;
+	l = new char[strlen(L) + 1];
+	strcpy(l, L);
+	cout << "Enter your request : ";
+	cin >> R;
+	r = new char[strlen(R) + 1];
+	strcpy(r, R);
+	char*ID = new char[10];
+	strcpy(ID, convert_to_char(id));
+	///////////////
+	string Id;
+	Id = ID;
+	ofstream ofile(string(Id + "_requestTOlecturer.txt").c_str(),ios::app);
+	list* s = head;
+	while (s != NULL) {
+		if (s->data->ID = id)
+			break;
+		s = s->next;
+	}
+	ofile << "From: " << s->data->last_name << " " << s->data->first_name << endl;
+	ofile<<"To: " << l << endl;
+	ofile << r << endl;
+	ofile.close();
+	cout << "Your request has been saved" << endl;
 }
-
 void printExamTable(int id,char* sub, char* date,char* day ,char* moed )
 {
 	char*ID = new char[10];
@@ -1263,14 +1433,14 @@ void printExamTable(int id,char* sub, char* date,char* day ,char* moed )
 	ofstream Efile(string(Id + "Exam.txt").c_str(), ios::app);
 		if (sub != NULL)
 	{
-		Efile <<endl<< sub << "\t\t" << date << "\t\t" << day << "\t\t" << moed << endl;
+		Efile << sub << "\t\t\t\t" << date << "\t\t" << day << "\t\t" << moed << endl;
 	}
 	Efile.close();
 	ifstream e(string(Id + "Exam.txt").c_str());
 	string f;
 	while (getline(e,f))
 	{
-		cout << f;
+		cout << f<<endl;
 	}
 	
 	
@@ -1374,8 +1544,11 @@ void addUser() {
 
 
 		mail = createEmail(name, last);
+
 		cout << "enter position\n";
 		cin >> position;
+
+
 		//write in user's data-base.
 		ofstream file1;
 		file1.open("users.txt", ios::app);
@@ -1445,6 +1618,7 @@ void add_choice_courses(int id) {
 				course_choice->name_course = name_course;
 				course_choice->next = NULL;
 				create_list_course(id, "sunday", "Roman Michaelan", "English", CountEnglishR);
+
 				Cfile << "English\t\t" << "Roman Michaelan" << endl;
 				Efile << "English\t\t\t15/1/2019\t\tWednesday\t\tA  |" << endl;
 				file << s->data->first_name << "  " << s->data->last_name << endl;
@@ -1813,6 +1987,11 @@ void print_timetable(int id)
 {
 	int num = 0;
 	list *s = head;
+	char*ID = new char[10];
+	strcpy(ID, convert_to_char(id));
+	string Id;
+	Id = ID;
+
 	while (s->data->ID!=id)
 	{
 		s = s->next;
@@ -1844,6 +2023,7 @@ void print_timetable(int id)
 		}
 
 	}
+
 
 
 }
@@ -2099,9 +2279,9 @@ int main()
 	ofstream T;
 	T.open("TENIS.txt");
 	ofstream Req;
-	Req.open(".txt");
-	ofstream report;
-	report.open("StudentRequest.txt");
+	Req.open("StudentRequest.txt");
+	ofstream reportNew1;
+	reportNew1.open("Reportusers.txt");
 	char* fileName = NULL;
 	login("users.txt");
 	ofstream reportNew;
