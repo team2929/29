@@ -1590,10 +1590,11 @@ void addUser() {
 
 
 		mail = createEmail(name, last);
-
+		do
+		{
 		cout << "enter position\n";
 		cin >> position;
-
+		} while (position!='A'&& position!='B' && position!='C');
 
 		//write in user's data-base.
 		ofstream file1;
