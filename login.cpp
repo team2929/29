@@ -341,6 +341,7 @@ void timeTableOption(int id)
 	ofile.open(string(Id + "Courses.txt").c_str());
 	Efile.open(string(Id + "Exam.txt").c_str());
 	Gfile.open(string(Id + "Grade.txt").c_str());
+	file1.open(string(Id + "Timetable.txt").c_str());
 	ofstream Afile("AFL.txt", ios::app);
 	ofstream Dfile("DS.txt", ios::app);
 	ofstream Ffile("FSE.txt", ios::app);
@@ -386,7 +387,22 @@ void timeTableOption(int id)
 			create_list_course(id, "wednesday", "Alexander Shkolnik", "AFL-lab", CountAFLL);
 			create(id, "thursday");
 			create(id, "friday");
-
+			file1 << endl << endl << "Sunday:" << endl;
+			file1 << "FSE-practice" << " with " << "Isabel Meif" << endl;
+			file1 << endl << endl << "Monday:" << endl;
+			file1 << "FSE" << " with " << "Hadas Hasidim" << endl;
+			file1 << "PSE-lab" << " with " << "Svetlana Rusin" << endl;
+			file1 << "Data struction-lab" << " with " << "Avishai Kraif" << endl;
+			file1 << endl << endl << "Tuesday:" << endl;
+			file1 << "Data struction" << " with " << "Irena revayev" << endl;
+			file1 << "PSE" << " with " << "Marina Litbak" << endl;
+			file1 << endl << endl << "Wednesday:" << endl;
+			file1 << "AFL" << " with " << "Alexander Chorkin" << endl;
+			file1 << "AFL-lab" << " with " << "Alexander shkolnik" << endl;
+			file1 << endl << endl << "Thursday:" << endl;
+			file1 << "Day off!" << endl;
+			file1 << endl << endl << "Friday:" << endl;
+			file1 << "Day off!" << endl;
 
 
 			ofile << "PSE\t\t" << "Marina Litbak" << endl;
@@ -459,7 +475,23 @@ void timeTableOption(int id)
 			create(id, "thursday");
 			create(id, "friday");
 
-
+			file1 << endl << endl << "Sunday:" << endl;
+			file1 << "FSE-practice" << " with " << "Isabel Meif" << endl;
+			file1 << "FSE" << " with " << "Hadas Hasidim" << endl;
+			file1 << "Data struction-lab" << " with " << "Avishai Kraif" << endl;
+			file1 << endl << endl << "Monday:" << endl;
+			file1 << "PSE-lab" << " with " << "Svetlana Rusin" << endl;
+			file1 << "AFL" << " with " << "Alexander Chorkin" << endl;
+			file1 << endl << endl << "Tuesday:" << endl;
+			file1 << "Data struction" << " with " << "Irena revayev" << endl;
+			file1 << "PSE" << " with " << "Marina Litbak" << endl;
+			file1 << "AFL-lab" << " with " << "Alexander shkolnik" << endl;
+			file1 << endl << endl << "Wednesday:" << endl;
+			file1 << "Day off!" << endl;
+			file1 << endl << endl << "Thursday:" << endl;
+			file1 << "Day off!" << endl;
+			file1 << endl << endl << "Friday:" << endl;
+			file1 << "Day off!" << endl;
 
 
 			ofile << "PSE\t\t" << "Marina Litbak" << endl;
@@ -533,7 +565,21 @@ void timeTableOption(int id)
 			create_list_course(id, "thursday", "Svetlana Rusin", "PSE-lab", CountPSEL);
 			create(id, "friday");
 
-
+			file1 << endl << endl << "Sunday:" << endl;
+			file1 << "FSE" << " with " << "Hadas Hasidim" << endl;
+			file1 << "Data struction-lab" << " with " << "Avishai Kraif" << endl;
+			file1 << endl << endl << "Monday:" << endl;
+			file1 << "AFL" << " with " << "Alexander Chorkin" << endl;
+			file1 << "FSE-practice" << " with " << "Isabel Meif" << endl;
+			file1 << endl << endl << "Tuesday:" << endl;
+			file1 << "Data struction" << " with " << "Irena revayev" << endl;
+			file1 << "AFL-lab" << " with " << "Alexander shkolnik" << endl;
+			file1 << endl << endl << "Wednesday:" << endl;
+			file1 << "PSE" << " with " << "Marina Litbak" << endl;
+			file1 << endl << endl << "Thursday:" << endl;
+			file1 << "PSE-lab" << " with " << "Svetlana Rusin" << endl;
+			file1 << endl << endl << "Friday:" << endl;
+			file1 << "Day off!" << endl;
 
 
 			ofile << "PSE\t\t" << "Marina Litbak" << endl;
@@ -1593,6 +1639,7 @@ void add_choice_courses(int id) {
 	strcpy(ID, convert_to_char(id));
 	string Id;
 	Id = ID;
+	ofstream file1(string(Id + "timetable.txt").c_str(), ios::app);
 	ofstream Cfile(string(Id + "Courses.txt").c_str(), ios::app);
 	ofstream Efile(string(Id + "Exam.txt").c_str(), ios::app);
 	int choice;
@@ -1991,7 +2038,8 @@ void print_timetable(int id)
 	strcpy(ID, convert_to_char(id));
 	string Id;
 	Id = ID;
-
+	ofstream file1;	//צריך פה לעשות לולאה על הקורסים ולהעתיק כל מערכת לקובץ
+	file1.open((string(Id + "timetable.txt").c_str()));
 	while (s->data->ID!=id)
 	{
 		s = s->next;
@@ -2002,6 +2050,7 @@ void print_timetable(int id)
 	{
 		cout << "-----------------------------------------------" << endl;
 		cout << t->name_day << " :" << endl;
+		file1 <<endl<< t->name_day<<" :"<<endl<<endl;
 		details_courses *k = t->courses;
 		num = 0;
 		if (k!=NULL)
@@ -2010,6 +2059,7 @@ void print_timetable(int id)
 			{
 				num++;
 				cout << k->name_course << " with " << k->lecture << endl;
+				file1 << k->name_course << " with " << k->lecture << endl;
 				k = k->next;
 			}
 			t = t->next;
@@ -2017,6 +2067,7 @@ void print_timetable(int id)
 		else
 		{
 			cout << "Day off!" << endl;
+			file1 << "Day off!" << endl;
 			t = t->next;
 
 
