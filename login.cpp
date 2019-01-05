@@ -52,12 +52,13 @@ int CountTenis = 5;
 int CountFrench = 5;
 int CountWine = 5;
 
+bool CheckMonth(int *);
 void AvailableSpaces();
 bool checkID_adduser(int);
 void timeTableOption(int);
 void addUser();
 void check(int, char*, int&);
-void changePosition(char*, char*);
+bool changePosition(char*, char*);
 char login_user(char*);
 void Backup(char*);
 void allUsersReporte(char* filename);
@@ -88,7 +89,20 @@ void Gradeprint(int);
 bool CheckID(int);
 bool exist_in_file(char*);
 char* convert_to_char(int);
+bool CheckYesOrNo(char*);
+bool checkChoise(int , int, int*);
+bool Checkposition(char* );
 
+
+bool checkChoise(int c1, int c2, int* choise) {
+	cin >> *choise;
+	while (*choise != c1 && *choise != c2)
+	{
+		cout << "Incorrect!choose " << c1 << " or " << c2 << endl;
+		cin >> *choise;
+	}
+	return true;
+}
 bool exist_in_file(char* id)
 {
 	char val[30], *s2;
@@ -957,7 +971,14 @@ void login(char* users)
 							system("cls");
 							cout << "Enter username:" << endl;
 							cin >> user;
-							changePosition(user, "users.txt");
+							if (changePosition(user, "users.txt")==true)
+							{
+								cout << "The position was changed!" << endl;
+							}
+							else
+							{
+								cout << "The position was not changed!" << endl;
+							}
 							break;
 						}
 						case 3:
@@ -1311,13 +1332,17 @@ void login(char* users)
 						system("cls");
 						char* ID;
 						ID = new char[10];
+
+						do
+						{
 						cout << "Enter student's id:" << endl;
 						cin >> id;
-						while (id < 100000000 || id > 999999999)
+						if (id<100000000 || id>999999999)
 						{
-							cout << "Id must contain 9 digit. enter again:" << endl;
-							cin >> id;
+							cout << "Id must contain 9 digit.\n";
 						}
+						} while (id<100000000 || id>999999999);
+
 
 						strcpy(ID, convert_to_char(id));
 						if (exist_in_file(ID) == false)
@@ -1437,9 +1462,24 @@ void security()
 }
 void requestTOlecturer(int id)
 {
-	char R[100],L[30],F[30];
+	char L[100],F[100];
+	string R;
+
 	char*r,*l,*f;
-	
+	char*ID = new char[10];
+	strcpy(ID, convert_to_char(id));
+	///////////////
+	string Id;
+	char d;
+	Id = ID;
+	ofstream ofile(string(Id + "_requestTOlecturer.txt").c_str(),ios::app);
+	list* s = head;
+	while (s != NULL)
+	{
+		if (s->data->ID == id)
+			break;
+		s = s->next;
+	}
 	cout << "Enter lecture first name: ";
 	cin >> F;
 	f = new char[strlen(F)+1];
@@ -1448,25 +1488,14 @@ void requestTOlecturer(int id)
 	cin >>L;
 	l = new char[strlen(L) + 1];
 	strcpy(l, L);
+	getchar();
 	cout << "Enter your request : ";
-	cin >> R;
-	r = new char[strlen(R) + 1];
-	strcpy(r, R);
-	char*ID = new char[10];
-	strcpy(ID, convert_to_char(id));
-	///////////////
-	string Id;
-	Id = ID;
-	ofstream ofile(string(Id + "_requestTOlecturer.txt").c_str(),ios::app);
-	list* s = head;
-	while (s != NULL) {
-		if (s->data->ID = id)
-			break;
-		s = s->next;
-	}
+	getline(cin,R);
+
+
 	ofile << "From: " << s->data->last_name << " " << s->data->first_name << endl;
 	ofile<<"To: " << l << endl;
-	ofile << r << endl;
+	ofile << R<< endl;
 	ofile.close();
 	cout << "Your request has been saved" << endl;
 }
@@ -1519,19 +1548,17 @@ bool checkID_adduser(int id)
 }
 void sendMessage()
 {
-	int choose1, choose2;
-	char message[100] ,*message2;
-	cout << "Choose what kind of message you want to send\n1.A lesson is cancelled\n2.Change in lesson\n";
-	cin >> choose1;
-	cout << "1.send message to all student\nsend message to student in course\n";
-	cin >> choose2;
+	int  choose2;
+	string message;
+	cout << "1.send message to all student\n2.send message to student in course\n";
+	checkChoise(1, 2, &choose2);
+	getchar();
 	cout << "Enter message:"<<endl;
-	cin >> message;
-	message2 = new char[strlen(message) + 1];
-	if(choose1==1)
-	cout << "The message: ''" << message << "''\non cancle lesson has been send !" << endl;
-	if (choose1 == 2)
-		cout << "The message:  ''" << message << "''\non Change in course has been send !" << endl;
+	getline(cin, message);
+	if(choose2==1)
+	cout << "The message: ''" << message << "''\nThe messege has been send to all the students!" << endl;
+	if (choose2 == 2)
+		cout << "The message:  ''" << message << "''\nThe messege has been send to stusents in specific course!" << endl;
 }
 void createlist(student* a) {
 	list *temp = NULL;
@@ -1616,6 +1643,7 @@ void addUser() {
 		}
 		else
 		{
+
 			file1.open("students.txt", ios::app);
 			file1 << endl << name << " " << last << " " << id << " " << mail << " " << password << " " << position;
 			file1.close();
@@ -1841,11 +1869,23 @@ void allUsersReporte(char* filename)
 		cout << endl;
 	}
 }
-void changePosition(char * email, char* filename)
+bool Checkposition(char* n)
 {
+	cin >> *n;
+	while (*n != 'A' &&*n != 'B'&&*n != 'C') {
+		cout << "Enter only A/B/C !\n";
+		cin >> *n;
+	}
+	return true;
+
+}
+bool changePosition(char * email, char* filename)
+{
+
 	cout << "Enter the new position to user:\n";
+	int k = 0;
 	char n, val[30], *s2 = NULL, type, a[2] = "A", b[2] = "B", c[2] = "C";
-	cin >> n;
+	Checkposition(&n);
 	ofstream newFile;
 	newFile.open("new.txt");
 	fstream ofs(filename, ios::in | ios::out);
@@ -1862,6 +1902,7 @@ void changePosition(char * email, char* filename)
 			newFile << val << ' ';
 			ofs >> val;
 			newFile << n << ' ' << endl;
+			k++;
 
 		}
 		else if (strcmp(val, a) == 0 || strcmp(val, b) == 0 || strcmp(val, c) == 0)
@@ -1875,7 +1916,10 @@ void changePosition(char * email, char* filename)
 	ofs.close();
 	remove("users.txt");
 	rename("new.txt", "users.txt");
-
+	if (k == 0) {
+		return false;
+	}
+	return true;
 }
 void Backup(char* filename)
 {
@@ -1919,34 +1963,50 @@ void Backup(char* filename)
 
 	}
 }
+bool CheckYesOrNo(char*c)
+{
+	cin >> *c;
+	while (*c != 'y'&&*c != 'n')
+	{
+		cout << "The choise must be 'y' or 'n'(y-Yes , n-No)\n";
+		cin >> *c;
+	}
+	if (*c == 'y')
+		return true;
+	else return false;
+
+}
 void restartSystem()
 {
 	char cha;
 	cout << "are you sure?(y=yes , n=no)" << endl;
-	cin >> cha;
-	if (cha=='y')
-	{
-	Backup("users.txt");
-	fstream restart("users.txt", ios::out | ios::trunc);
-	restart.close();
+	if (CheckYesOrNo(&cha) == true) {
+		Backup("users.txt");
+		fstream restart("users.txt", ios::out | ios::trunc);
+		restart.close();
 	}
 
+}
+bool CheckMonth(int *month)
+{
+	cin >> *month;
+	while (*month <= 0 || *month > 12)
+	{
+		cout << "Incorrect input. enter again: ";
+		cin >> *month;
+	}
+
+	return true;
 }
 void bugIinsystem()
 {
 	int month = 0;
 	char numberRepot[6];
 	cout << "Enter the month in which you want to see the bug report\n";
-	cin >> month;
-	while (month <= 0 || month > 12)
-	{
-		cout << "Incorrect input. enter again: ";
-		cin >> month;
-	}
+	CheckMonth(&month);
 	cout << "Select the report number\n";
 	cout << "1001A- Processes data\n1003A- Produces output\n9991B- System virus\n9992B- Security breaches\n-->";
 	cin >> numberRepot;
-
 	while (strcmp(numberRepot, "1001A") == 1 && (strcmp(numberRepot, "1003A")) == 1 && (strcmp(numberRepot, "9991B")) == 1 && (strcmp(numberRepot, "9992B")) == 1)
 	{
 		cout << "This report does not exist Please enter an existing report from the list\n";
@@ -1971,15 +2031,16 @@ void bugIinsystem()
 }
 void resetPassword(char* filename)
 {
-	char user[30], val[30], *s2 = NULL, NewPass[9], a[2] = "A", b[2] = "B", c[2] = "C";
-	int check = 0, j = 0;
+	char user[30], val[30], *s2 = NULL, NewPass[9], a[2] = "A", b[2] = "B", c[2] = "C", val1[30];
+	int check = 0, j = 0,k=0;
 	cout << "Enter user name to reset the password:\n";
 	cin >> user;
 	cout << "Enter the new password:\n(start with capital letter,contain at least 1 digit and 1 small letter)";
 	cin >> NewPass;
 	ofstream newFile;
 	newFile.open("new.txt");
-	fstream ofs(filename, ios::in | ios::out);
+
+	ifstream file3(filename);
 	if (!filename)//if file couldnt open, throws an exception
 		throw runtime_error("file is empty");
 	do {
@@ -2005,29 +2066,45 @@ void resetPassword(char* filename)
 		}
 
 	} while (j == 0);
-	while (ofs >> val)
+	while (file3>>val1)
 	{
-		newFile << val << ' ';
-		if (strcmp(val, user) == 0)
+		if (strcmp(val1, user) == 0)
 		{
-			ofs >> val;
-			newFile << NewPass << ' ';
-
-		}
-		else if (strcmp(val, a) == 0 || strcmp(val, b) == 0 || strcmp(val, c) == 0)
-		{
-			newFile << endl;
-
-
-
+			k++;
 		}
 	}
-	newFile.close();
-	ofs.close();
-	remove("users.txt");
-	rename("new.txt", "users.txt");
-	cout << "password changed successfully" << endl;
+	file3.close();
+	fstream ofs(filename, ios::in | ios::out);
+	if (k != 0)
+	{
+		while (ofs >> val)
+		{
+			newFile << val << ' ';
+			if (strcmp(val, user) == 0)
+			{
 
+				ofs >> val;
+				newFile << NewPass << ' ';
+
+			}
+			else if (strcmp(val, a) == 0 || strcmp(val, b) == 0 || strcmp(val, c) == 0)
+			{
+				newFile << endl;
+
+
+
+			}
+		}
+		newFile.close();
+		ofs.close();
+		remove("users.txt");
+		rename("new.txt", "users.txt");
+		cout << "password changed successfully" << endl;
+	}
+	else
+	{
+		cout << "Not find this user!" << endl;
+	}
 
 
 }
